@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>𝗘𝗮𝗿𝗻𝗶𝗻𝗴 𝗕𝗗 𝗟𝗶𝘁𝗲💰</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      overflow-x: hidden;
+    }
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 50;
+      background: linear-gradient(to right, #1a2a44, #2c5364);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+    .welcome-text {
+      animation: fadeIn 2s ease-in-out;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
+      background: linear-gradient(to right, #ffd700, #ffeb3b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .banner-carousel {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    .banner-card {
+      flex: 0 0 calc(100% - 2px);
+      margin: 0 0.25px;
+    }
+    .banner-card img {
+      width: 1280px;
+      height: 720px;
+      object-fit: cover;
+    }
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      opacity: 0.5;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    .dot.active {
+      opacity: 1;
+    }
+    .twitter-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .twitter-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+    }
+    .dropdown-content {
+      display: none;
+      transition: all 0.3s ease;
+    }
+    .dropdown-content.active {
+      display: block;
+    }
+    #whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+    #video-section {
+      display: none;
+      margin-top: 1rem;
+    }
+    #video-section.active {
+      display: block;
+    }
+    .video-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .video-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+    }
+    @media (max-width: 1280px) {
+      .banner-card img,
+      .twitter-card img,
+      .video-card img {
+        width: 100%;
+        height: auto;
+      }
+    }
+    @media (max-width: 640px) {
+      .welcome-text {
+        font-size: 2rem !important;
+      }
+      .welcome-text.text-3xl {
+        font-size: 1.5rem !important;
+      }
+      .welcome-text.text-2xl {
+        font-size: 1.25rem !important;
+      }
+      .banner-card img,
+      .twitter-card img,
+      .video-card img {
+        height: 200px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header flex items-center justify-between px-6 py-4">
+    <div class="flex items-center space-x-4">
+      <img src="https://iili.io/FkchFO7.jpg" alt="FOMO Logo" class="h-12 w-12 rounded-full">
+      <h1 class="text-2xl font-bold">𝗘𝗮𝗿𝗻𝗶𝗻𝗴 𝗕𝗗 𝗟𝗶𝘁𝗲</h1>
+    </div>
+    <div class="flex items-center space-x-4">
+      <a href="https://t.me/Earningbdlite24" target="_blank">
+        <img src="https://iili.io/FkaPePp.png" alt="Telegram" class="h-8 w-8 rounded-full">
+      </a>
+      <a href="https://youtube.com/@earningbdlite" target="_blank">
+        <img src="https://iili.io/FkaPjDJ.png" alt="YouTube" class="h-8 w-8 rounded-full">
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div id="main-content">
+    <!-- Welcome Section -->
+    <section class="text-center mt-24 mb-12 px-4">
+      <h2 class="text-5xl font-semibold welcome-text">Welcome to 𝗘𝗮𝗿𝗻𝗶𝗻𝗴 𝗕𝗗 𝗟𝗶𝘁𝗲</h2>
+      <p class="text-3xl font-medium welcome-text mt-4">Join our Telegram channel and follow us on Twitter</p>
+      <p class="text-2xl font-medium welcome-text mt-2">Follow all updates on Telegram and Twitter, you will earn many, InshaAllah.</p>
+    </section>
+
+    <!-- Banner Carousel -->
+    <section class="mb-12 px-0.25">
+      <div class="overflow-hidden">
+        <div id="bannerCarousel" class="banner-carousel flex">
+          <a href="https://youtube.com/@earningbdlite" target="_blank" class="banner-card">
+            <img src="https://iili.io/Fk1unM7.jpg" alt="Banner 1" class="rounded-xl">
+          </a>
+          <a href="https://youtube.com/@earningbdlite" target="_blank" class="banner-card">
+            <img src="https://iili.io/Fk1unM7.jpg" alt="Banner 2" class="rounded-xl">
+          </a>
+          <a href="https://youtube.com/@earningbdlite" target="_blank" class="banner-card">
+            <img src="https://iili.io/Fk1unM7.jpg" alt="Banner 3" class="rounded-xl">
+          </a>
+        </div>
+        <div class="carousel-dots">
+          <span class="dot active" onclick="goToSlide(0)"></span>
+          <span class="dot" onclick="goToSlide(1)"></span>
+          <span class="dot" onclick="goToSlide(2)"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- All Video Button and Video Section -->
+    <section class="text-center mb-12">
+      <button onclick="toggleVideos()" class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold px-8 py-4 rounded-xl hover:from-yellow-500 hover:to-yellow-700 transition">All Video</button>
+      <div id="video-section">
+        <div class="max-w-5xl mx-auto px-4 mt-6">
+          <div class="mb-6">
+            <button onclick="toggleVideos()" class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold px-8 py-4 rounded-xl hover:from-yellow-500 hover:to-yellow-700 transition">Back</button>
+          </div>
+          <div class="space-y-6">
+            <a href="https://youtube.com/@earningbdlite" target="_blank" class="block video-card rounded-xl">
+              <img src="https://iili.io/Fk1unM7.jpg" alt="Video 1" class="w-full h-720px object-cover rounded-xl">
+            </a>
+            <a href="https://youtube.com/@earningbdlite" target="_blank" class="block video-card rounded-xl">
+              <img src="https://iili.io/Fk1unM7.jpg" alt="Video 2" class="w-full h-720px object-cover rounded-xl">
+            </a>
+            <a href="https://youtube.com/@earningbdlite" target="_blank" class="block video-card rounded-xl">
+              <img src="https://iili.io/Fk1unM7.jpg" alt="Video 3" class="w-full h-720px object-cover rounded-xl">
+            </a>
+            <a href="https://youtube.com/@earningbdlite" target="_blank" class="block video-card rounded-xl">
+              <img src="https://iili.io/Fk1unM7.jpg" alt="Video 4" class="w-full h-720px object-cover rounded-xl">
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Twitter Section -->
+    <section class="mb-12 max-w-5xl mx-auto px-4">
+      <div class="flex items-center space-x-4 mb-6">
+        <img src="https://iili.io/FkaPhNa.png" alt="Twitter" class="h-8 w-8 rounded-full">
+        <h3 class="text-3xl font-bold">Twitter Posts</h3>
+      </div>
+      <div class="space-y-6">
+        <a href="https://x.com/ARofficialB" target="_blank" class="block twitter-card rounded-xl max-w-5xl mx-auto">
+          <img src="https://iili.io/Fk1h6Pe.jpg" alt="Twitter Post" class="w-full h-720px object-cover rounded-xl">
+        </a>
+        <a href="https://x.com/ARofficialB" target="_blank" class="block twitter-card rounded-xl max-w-5xl mx-auto">
+          <img src="https://iili.io/Fk1h6Pe.jpg" alt="Twitter Post" class="w-full h-720px object-cover rounded-xl">
+        </a>
+        <a href="https://x.com/ARofficialB" target="_blank" class="block twitter-card rounded-xl max-w-5xl mx-auto">
+          <img src="https://iili.io/Fk1h6Pe.jpg" alt="Twitter Post" class="w-full h-720px object-cover rounded-xl">
+        </a>
+      </div>
+    </section>
+
+    <!-- Telegram Section -->
+    <section class="mb-12 max-w-5xl mx-auto px-4">
+      <div class="flex items-center space-x-4 mb-6">
+        <img src="https://iili.io/FkchFO7.jpg" alt="Telegram" class="h-8 w-8 rounded-full">
+        <h3 class="text-3xl font-bold">Telegram Posts</h3>
+      </div>
+      <div class="space-y-6">
+        <div class="block bg-white bg-opacity-10 p-4 rounded-xl card-hover max-w-md mx-auto">
+          <div class="flex items-center space-x-4 cursor-pointer" onclick="toggleDropdown('dropdown1')">
+            <img src="https://iili.io/FkchFO7.jpg" alt="Project Logo" class="h-16 w-16 rounded-full">
+            <h4 class="text-lg font-semibold"> 𝗘𝗮𝗿𝗻𝗶𝗻𝗴 𝗕𝗗 𝗟𝗶𝘁𝗲💰  #1</h4>
+          </div>
+          <div id="dropdown1" class="dropdown-content space-y-4 mt-4">
+            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
+              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
+              <p>Sub Update 1.1</p>
+            </a>
+            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
+              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
+              <p>Sub Update 1.2</p>
+            </a>
+            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
+              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
+              <p>Sub Update 1.3</p>
+            </a>
+          </div>
+        </div>
+        <div class="block bg-white bg-opacity-10 p-4 rounded-xl card-hover max-w-md mx-auto">
+          <div class="flex items-center space-x-4 cursor-pointer" onclick="toggleDropdown('dropdown2')">
+            <img src="https://iili.io/FkchFO7.jpg" alt="Project Logo" class="h-16 w-16 rounded-full">
+            <h4 class="text-lg font-semibold">FOMO Project Update #2</h4>
+          </div>
+          <div id="dropdown2" class="dropdown-content space-y-4 mt-4">
+            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
+              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
+              <p>Sub Update 2.1</p>
+            </a>
+            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
+              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
+              <p>Sub Update 2.2</p>
+            </a>
+            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
+              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
+              <p>Sub Update 2.3</p>
+            </a>
+          </div>
+        </div>
+        <div class="block bg-white bg-opacity-10 p-4 rounded-xl card-hover max-w-md mx-auto">
+          <div class="flex items-center space-x-4 cursor-pointer" onclick="toggleDropdown('dropdown3')">
+            <img src="https://iili.io/FkchFO7.jpg" alt="Project Logo" class="h-16 w-16 rounded-full">
+            <h4 class="text-lg font-semibold">FOMO Project Update #3</h4>
+          </div>
+          <div id="dropdown3" class="dropdown-content space-y-4 mt-4">
+            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
+              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
+              <p>Sub Update 3.1</p>
+            </a>
+            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
+              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
+              <p>Sub Update 3.2</p>
+            </a>
+            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
+              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
+              <p>Sub Update 3.3</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Subscription Section -->
+    <section class="mb-12 max-w-5xl mx-auto px-4">
+      <div class="flex items-center space-x-4 mb-6">
+        <img src="https://iili.io/FkaPePp.png" alt="Subscription" class="h-8 w-8 rounded-full">
+        <h3 class="text-3xl font-bold">Subscribe for Updates</h3>
+      </div>
+      <div class="bg-white bg-opacity-10 p-6 rounded-xl">
+        <input type="email" id="emailInput" placeholder="Enter your email" class="w-full mb-4 p-2 rounded text-black">
+        <button onclick="subscribe()" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold py-2 rounded-xl hover:from-yellow-500 hover:to-yellow-700">Subscribe</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/+8801794733883" target="_blank" id="whatsapp-float">
+    <img src="https://iili.io/FkaPNov.png" alt="WhatsApp" class="h-12 w-12 rounded-full">
+  </a>
+
+  <!-- Firebase and JavaScript -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCJbHkhvgfbM1Hymh23jIePb9c-BbZz4_Y",
+      authDomain: "neuroai-114fa.firebaseapp.com",
+      databaseURL: "https://neuroai-114fa-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "neuroai-114fa",
+      storageBucket: "neuroai-114fa.firebasestorage.app",
+      messagingSenderId: "483447356004",
+      appId: "1:483447356004:web:03df2903d16b446a47bd71"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    window.subscribe = () => {
+      const email = document.getElementById('emailInput').value.trim();
+      if (!email) {
+        alert('Please enter a valid email.');
+        return;
+      }
+      const subscriptionsRef = ref(database, 'subscriptions');
+      push(subscriptionsRef, {
+        email,
+        timestamp: Date.now()
+      });
+      alert('Subscribed successfully!');
+      document.getElementById('emailInput').value = '';
+    };
+
+    // Banner Carousel
+    const carousel = document.getElementById('bannerCarousel');
+    const dots = document.querySelectorAll('.dot');
+    let currentIndex = 0;
+    const banners = document.querySelectorAll('.banner-card');
+    function updateCarousel() {
+      carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentIndex);
+      });
+    }
+    function goToSlide(index) {
+      currentIndex = index;
+      updateCarousel();
+    }
+    function slideBanners() {
+      currentIndex = (currentIndex + 1) % banners.length;
+      updateCarousel();
+    }
+    setInterval(slideBanners, 3000);
+    updateCarousel();
+
+    // Dropdown Toggle
+    window.toggleDropdown = (id) => {
+      const dropdown = document.getElementById(id);
+      dropdown.classList.toggle('active');
+    };
+
+    // Video Section Toggle
+    const videoSection = document.getElementById('video-section');
+    window.toggleVideos = () => {
+      videoSection.classList.toggle('active');
+    };
+  </script>
+</body>
+</html>
