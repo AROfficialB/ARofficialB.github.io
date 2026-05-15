@@ -1,377 +1,311 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>𝗘𝗮𝗿𝗻𝗶𝗻𝗴 𝗕𝗗 𝗟𝗶𝘁𝗲💰</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFT Holder Snapshot</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Sora:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        heading: ['Sora', 'sans-serif'],
+        mono: ['Space Mono', 'monospace']
+      }
+    }
+  }
+}
+</script>
   <style>
-    body {
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-      font-family: 'Segoe UI', sans-serif;
-      color: white;
-      overflow-x: hidden;
-    }
-    .header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 50;
-      background: linear-gradient(to right, #1a2a44, #2c5364);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    }
-    .welcome-text {
-      animation: fadeIn 2s ease-in-out;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
-      background: linear-gradient(to right, #ffd700, #ffeb3b);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .banner-carousel {
-      display: flex;
-      transition: transform 0.5s ease-in-out;
-    }
-    .banner-card {
-      flex: 0 0 calc(100% - 2px);
-      margin: 0 0.25px;
-    }
-    .banner-card img {
-      width: 1280px;
-      height: 720px;
-      object-fit: cover;
-    }
-    .carousel-dots {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .dot {
-      width: 10px;
-      height: 10px;
-      background: #fff;
-      opacity: 0.5;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: opacity 0.3s;
-    }
-    .dot.active {
-      opacity: 1;
-    }
-    .twitter-card {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .twitter-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
-    }
-    .dropdown-content {
-      display: none;
-      transition: all 0.3s ease;
-    }
-    .dropdown-content.active {
-      display: block;
-    }
-    #whatsapp-float {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 100;
-    }
-    #video-section {
-      display: none;
-      margin-top: 1rem;
-    }
-    #video-section.active {
-      display: block;
-    }
-    .video-card {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .video-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
-    }
-    @media (max-width: 1280px) {
-      .banner-card img,
-      .twitter-card img,
-      .video-card img {
-        width: 100%;
-        height: auto;
-      }
-    }
-    @media (max-width: 640px) {
-      .welcome-text {
-        font-size: 2rem !important;
-      }
-      .welcome-text.text-3xl {
-        font-size: 1.5rem !important;
-      }
-      .welcome-text.text-2xl {
-        font-size: 1.25rem !important;
-      }
-      .banner-card img,
-      .twitter-card img,
-      .video-card img {
-        height: 200px !important;
-      }
-    }
-  </style>
-</head>
-<body>
-  <!-- Header -->
-  <header class="header flex items-center justify-between px-6 py-4">
-    <div class="flex items-center space-x-4">
-      <img src="https://iili.io/FkchFO7.jpg" alt="FOMO Logo" class="h-12 w-12 rounded-full">
-      <h1 class="text-2xl font-bold">𝗘𝗮𝗿𝗻𝗶𝗻𝗴 𝗕𝗗 𝗟𝗶𝘁𝗲</h1>
-    </div>
-    <div class="flex items-center space-x-4">
-      <a href="https://t.me/Earningbdlite24" target="_blank">
-        <img src="https://iili.io/FkaPePp.png" alt="Telegram" class="h-8 w-8 rounded-full">
-      </a>
-      <a href="https://youtube.com/@earningbdlite" target="_blank">
-        <img src="https://iili.io/FkaPjDJ.png" alt="YouTube" class="h-8 w-8 rounded-full">
-      </a>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <div id="main-content">
-    <!-- Welcome Section -->
-    <section class="text-center mt-24 mb-12 px-4">
-      <h2 class="text-5xl font-semibold welcome-text">Welcome to 𝗘𝗮𝗿𝗻𝗶𝗻𝗴 𝗕𝗗 𝗟𝗶𝘁𝗲</h2>
-      <p class="text-3xl font-medium welcome-text mt-4">Join our Telegram channel and follow us on Twitter</p>
-      <p class="text-2xl font-medium welcome-text mt-2">Follow all updates on Telegram and Twitter, you will earn many, InshaAllah.</p>
-    </section>
-
-    <!-- Banner Carousel -->
-    <section class="mb-12 px-0.25">
-      <div class="overflow-hidden">
-        <div id="bannerCarousel" class="banner-carousel flex">
-          <a href="https://youtube.com/@earningbdlite" target="_blank" class="banner-card">
-            <img src="https://iili.io/Fk1unM7.jpg" alt="Banner 1" class="rounded-xl">
-          </a>
-          <a href="https://youtube.com/@earningbdlite" target="_blank" class="banner-card">
-            <img src="https://iili.io/Fk1unM7.jpg" alt="Banner 2" class="rounded-xl">
-          </a>
-          <a href="https://youtube.com/@earningbdlite" target="_blank" class="banner-card">
-            <img src="https://iili.io/Fk1unM7.jpg" alt="Banner 3" class="rounded-xl">
-          </a>
-        </div>
-        <div class="carousel-dots">
-          <span class="dot active" onclick="goToSlide(0)"></span>
-          <span class="dot" onclick="goToSlide(1)"></span>
-          <span class="dot" onclick="goToSlide(2)"></span>
-        </div>
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .gradient-bg {
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 30%, #0f1a2e 60%, #0a0a0f 100%);
+    background-size: 300% 300%;
+    animation: gradientShift 12s ease infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .float { animation: float 4s ease-in-out infinite; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.6s ease forwards; }
+  .fade-up-d1 { animation-delay: 0.1s; opacity: 0; }
+  .fade-up-d2 { animation-delay: 0.2s; opacity: 0; }
+  .fade-up-d3 { animation-delay: 0.3s; opacity: 0; }
+  .glow-border {
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.08), inset 0 0 20px rgba(139, 92, 246, 0.03);
+  }
+  .input-glow:focus {
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.4), 0 0 30px rgba(139, 92, 246, 0.1);
+  }
+  .btn-glow {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+    transition: all 0.3s ease;
+  }
+  .btn-glow:hover:not(:disabled) {
+    box-shadow: 0 6px 30px rgba(124, 58, 237, 0.6);
+    transform: translateY(-1px);
+  }
+  .btn-glow:disabled { opacity: 0.5; cursor: not-allowed; }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.3); border-radius: 3px; }
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="gradient-bg h-full w-full overflow-auto relative font-heading"><!-- Orbs -->
+   <div class="orb" style="width:400px;height:400px;background:#7c3aed;top:-100px;right:-100px;"></div>
+   <div class="orb" style="width:300px;height:300px;background:#3b82f6;bottom:10%;left:-80px;"></div>
+   <div class="max-w-2xl mx-auto px-4 py-10 sm:py-16 relative z-10"><!-- Header -->
+    <header class="text-center mb-10 fade-up">
+     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-medium mb-5 tracking-wide"><i data-lucide="hexagon" style="width:14px;height:14px;"></i> ON-CHAIN DATA TOOL
+     </div>
+     <h1 id="siteTitle" class="text-3xl sm:text-5xl font-bold text-white mb-3 tracking-tight">NFT Holder Snapshot</h1>
+     <p id="subtitleText" class="text-gray-400 text-sm sm:text-base max-w-md mx-auto">Export any NFT collection's holder addresses as a CSV — powered by public APIs.</p>
+    </header><!-- Main Card -->
+    <div class="glow-border rounded-2xl bg-white/[0.03] backdrop-blur-sm p-5 sm:p-8 fade-up fade-up-d1"><!-- Network Select -->
+     <div class="mb-5"><label for="networkSelect" class="block text-gray-300 text-sm font-medium mb-2">Blockchain Network</label>
+      <div class="relative"><select id="networkSelect" class="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white text-sm appearance-none focus:outline-none input-glow transition"> <option value="eth-mainnet">Ethereum Mainnet</option> <option value="polygon-mainnet">Polygon</option> <option value="opt-mainnet">Optimism</option> <option value="arb-mainnet">Arbitrum</option> <option value="base-mainnet">Base</option> </select> <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" style="width:18px;height:18px;"></i>
       </div>
-    </section>
-
-    <!-- All Video Button and Video Section -->
-    <section class="text-center mb-12">
-      <button onclick="toggleVideos()" class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold px-8 py-4 rounded-xl hover:from-yellow-500 hover:to-yellow-700 transition">All Video</button>
-      <div id="video-section">
-        <div class="max-w-5xl mx-auto px-4 mt-6">
-          <div class="mb-6">
-            <button onclick="toggleVideos()" class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold px-8 py-4 rounded-xl hover:from-yellow-500 hover:to-yellow-700 transition">Back</button>
-          </div>
-          <div class="space-y-6">
-            <a href="https://youtube.com/@earningbdlite" target="_blank" class="block video-card rounded-xl">
-              <img src="https://iili.io/Fk1unM7.jpg" alt="Video 1" class="w-full h-720px object-cover rounded-xl">
-            </a>
-            <a href="https://youtube.com/@earningbdlite" target="_blank" class="block video-card rounded-xl">
-              <img src="https://iili.io/Fk1unM7.jpg" alt="Video 2" class="w-full h-720px object-cover rounded-xl">
-            </a>
-            <a href="https://youtube.com/@earningbdlite" target="_blank" class="block video-card rounded-xl">
-              <img src="https://iili.io/Fk1unM7.jpg" alt="Video 3" class="w-full h-720px object-cover rounded-xl">
-            </a>
-            <a href="https://youtube.com/@earningbdlite" target="_blank" class="block video-card rounded-xl">
-              <img src="https://iili.io/Fk1unM7.jpg" alt="Video 4" class="w-full h-720px object-cover rounded-xl">
-            </a>
-          </div>
-        </div>
+     </div><!-- Contract Address -->
+     <div class="mb-5"><label for="contractInput" class="block text-gray-300 text-sm font-medium mb-2">Contract Address</label> <input id="contractInput" type="text" placeholder="0x..." spellcheck="false" class="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none input-glow transition font-mono">
+     </div><!-- API Key -->
+     <div class="mb-6"><label for="apiKeyInput" class="block text-gray-300 text-sm font-medium mb-2"> Alchemy API Key <a href="https://dashboard.alchemy.com/signup" target="_blank" rel="noopener noreferrer" class="text-violet-400 hover:text-violet-300 ml-1 font-normal">(Get free key →)</a> </label> <input id="apiKeyInput" type="password" placeholder="Your Alchemy API key" class="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none input-glow transition font-mono">
+      <p class="text-gray-600 text-xs mt-1.5">Your key stays in your browser and is never stored.</p>
+     </div><!-- Fetch Button --> <button id="fetchBtn" onclick="fetchHolders()" class="btn-glow w-full rounded-xl px-6 py-3.5 text-white font-semibold text-sm flex items-center justify-center gap-2"> <i data-lucide="download-cloud" style="width:18px;height:18px;"></i> <span id="fetchBtnText">Fetch Holders</span> </button>
+    </div><!-- Progress -->
+    <div id="progressSection" class="hidden mt-6 fade-up fade-up-d2">
+     <div class="glow-border rounded-2xl bg-white/[0.03] p-5">
+      <div class="flex items-center justify-between mb-3"><span class="text-gray-300 text-sm font-medium">Fetching holders…</span> <span id="progressCount" class="text-violet-400 text-sm font-mono">0</span>
       </div>
-    </section>
-
-    <!-- Twitter Section -->
-    <section class="mb-12 max-w-5xl mx-auto px-4">
-      <div class="flex items-center space-x-4 mb-6">
-        <img src="https://iili.io/FkaPhNa.png" alt="Twitter" class="h-8 w-8 rounded-full">
-        <h3 class="text-3xl font-bold">Twitter Posts</h3>
+      <div class="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+       <div id="progressBar" class="h-full bg-gradient-to-r from-violet-600 to-blue-500 rounded-full transition-all duration-300" style="width:10%"></div>
       </div>
-      <div class="space-y-6">
-        <a href="https://x.com/ARofficialB" target="_blank" class="block twitter-card rounded-xl max-w-5xl mx-auto">
-          <img src="https://iili.io/Fk1h6Pe.jpg" alt="Twitter Post" class="w-full h-720px object-cover rounded-xl">
-        </a>
-        <a href="https://x.com/ARofficialB" target="_blank" class="block twitter-card rounded-xl max-w-5xl mx-auto">
-          <img src="https://iili.io/Fk1h6Pe.jpg" alt="Twitter Post" class="w-full h-720px object-cover rounded-xl">
-        </a>
-        <a href="https://x.com/ARofficialB" target="_blank" class="block twitter-card rounded-xl max-w-5xl mx-auto">
-          <img src="https://iili.io/Fk1h6Pe.jpg" alt="Twitter Post" class="w-full h-720px object-cover rounded-xl">
-        </a>
+      <p id="progressMsg" class="text-gray-500 text-xs mt-2">Please wait, paginating through all holders…</p>
+     </div>
+    </div><!-- Results -->
+    <div id="resultsSection" class="hidden mt-6 fade-up fade-up-d3">
+     <div class="glow-border rounded-2xl bg-white/[0.03] p-5">
+      <div class="flex items-center justify-between mb-4">
+       <h2 class="text-white font-semibold text-lg flex items-center gap-2"><i data-lucide="users" style="width:20px;height:20px;" class="text-violet-400"></i> <span id="resultTitle">Holders Found</span></h2><button id="downloadBtn" onclick="downloadCSV()" class="flex items-center gap-1.5 bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition"> <i data-lucide="file-down" style="width:14px;height:14px;"></i> Download CSV </button>
+      </div><!-- Stats -->
+      <div class="grid grid-cols-2 gap-3 mb-4">
+       <div class="bg-white/[0.04] rounded-xl p-3 text-center">
+        <p class="text-gray-500 text-xs mb-1">Unique Holders</p>
+        <p id="statHolders" class="text-white font-bold text-xl font-mono">0</p>
+       </div>
+       <div class="bg-white/[0.04] rounded-xl p-3 text-center">
+        <p class="text-gray-500 text-xs mb-1">Total Supply</p>
+        <p id="statSupply" class="text-white font-bold text-xl font-mono">0</p>
+       </div>
+      </div><!-- Preview -->
+      <div class="bg-black/30 rounded-xl p-3 max-h-48 overflow-auto scrollbar-thin">
+       <table class="w-full text-xs">
+        <thead>
+         <tr class="text-gray-500 border-b border-white/5">
+          <th class="text-left py-2 px-2">#</th>
+          <th class="text-left py-2 px-2">Address</th>
+          <th class="text-right py-2 px-2">Balance</th>
+         </tr>
+        </thead>
+        <tbody id="previewTable" class="text-gray-300 font-mono"></tbody>
+       </table>
       </div>
-    </section>
-
-    <!-- Telegram Section -->
-    <section class="mb-12 max-w-5xl mx-auto px-4">
-      <div class="flex items-center space-x-4 mb-6">
-        <img src="https://iili.io/FkchFO7.jpg" alt="Telegram" class="h-8 w-8 rounded-full">
-        <h3 class="text-3xl font-bold">Telegram Posts</h3>
-      </div>
-      <div class="space-y-6">
-        <div class="block bg-white bg-opacity-10 p-4 rounded-xl card-hover max-w-md mx-auto">
-          <div class="flex items-center space-x-4 cursor-pointer" onclick="toggleDropdown('dropdown1')">
-            <img src="https://iili.io/FkchFO7.jpg" alt="Project Logo" class="h-16 w-16 rounded-full">
-            <h4 class="text-lg font-semibold"> 𝗘𝗮𝗿𝗻𝗶𝗻𝗴 𝗕𝗗 𝗟𝗶𝘁𝗲💰  #1</h4>
-          </div>
-          <div id="dropdown1" class="dropdown-content space-y-4 mt-4">
-            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
-              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
-              <p>Sub Update 1.1</p>
-            </a>
-            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
-              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
-              <p>Sub Update 1.2</p>
-            </a>
-            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
-              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
-              <p>Sub Update 1.3</p>
-            </a>
-          </div>
-        </div>
-        <div class="block bg-white bg-opacity-10 p-4 rounded-xl card-hover max-w-md mx-auto">
-          <div class="flex items-center space-x-4 cursor-pointer" onclick="toggleDropdown('dropdown2')">
-            <img src="https://iili.io/FkchFO7.jpg" alt="Project Logo" class="h-16 w-16 rounded-full">
-            <h4 class="text-lg font-semibold">FOMO Project Update #2</h4>
-          </div>
-          <div id="dropdown2" class="dropdown-content space-y-4 mt-4">
-            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
-              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
-              <p>Sub Update 2.1</p>
-            </a>
-            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
-              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
-              <p>Sub Update 2.2</p>
-            </a>
-            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
-              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
-              <p>Sub Update 2.3</p>
-            </a>
-          </div>
-        </div>
-        <div class="block bg-white bg-opacity-10 p-4 rounded-xl card-hover max-w-md mx-auto">
-          <div class="flex items-center space-x-4 cursor-pointer" onclick="toggleDropdown('dropdown3')">
-            <img src="https://iili.io/FkchFO7.jpg" alt="Project Logo" class="h-16 w-16 rounded-full">
-            <h4 class="text-lg font-semibold">FOMO Project Update #3</h4>
-          </div>
-          <div id="dropdown3" class="dropdown-content space-y-4 mt-4">
-            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
-              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
-              <p>Sub Update 3.1</p>
-            </a>
-            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
-              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
-              <p>Sub Update 3.2</p>
-            </a>
-            <a href="https://t.me/Earningbdlite24" target="_blank" class="block bg-white bg-opacity-5 p-3 rounded-lg flex items-center space-x-4">
-              <img src="https://iili.io/FkchFO7.jpg" alt="Sub Post" class="h-12 w-12 rounded-full">
-              <p>Sub Update 3.3</p>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Subscription Section -->
-    <section class="mb-12 max-w-5xl mx-auto px-4">
-      <div class="flex items-center space-x-4 mb-6">
-        <img src="https://iili.io/FkaPePp.png" alt="Subscription" class="h-8 w-8 rounded-full">
-        <h3 class="text-3xl font-bold">Subscribe for Updates</h3>
-      </div>
-      <div class="bg-white bg-opacity-10 p-6 rounded-xl">
-        <input type="email" id="emailInput" placeholder="Enter your email" class="w-full mb-4 p-2 rounded text-black">
-        <button onclick="subscribe()" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-bold py-2 rounded-xl hover:from-yellow-500 hover:to-yellow-700">Subscribe</button>
-      </div>
-    </section>
+      <p class="text-gray-600 text-xs mt-2 text-center">Showing first 50 holders — download CSV for the full list.</p>
+     </div>
+    </div><!-- Footer -->
+    <footer class="text-center mt-10 text-gray-600 text-xs">
+     Uses <a href="https://docs.alchemy.com/reference/getownersforcollection" target="_blank" rel="noopener noreferrer" class="text-violet-500 hover:text-violet-400">Alchemy API</a> · Your API key never leaves your browser
+    </footer>
+   </div><!-- Toast -->
+   <div id="toast" class="toast px-5 py-3 rounded-xl text-sm font-medium max-w-sm text-center"></div>
   </div>
+  <script>
+  // State
+  let holdersData = [];
 
-  <!-- WhatsApp Floating Button -->
-  <a href="https://wa.me/+8801794733883" target="_blank" id="whatsapp-float">
-    <img src="https://iili.io/FkaPNov.png" alt="WhatsApp" class="h-12 w-12 rounded-full">
-  </a>
+  // Toast
+  function showToast(msg, type = 'error') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast px-5 py-3 rounded-xl text-sm font-medium max-w-sm text-center show ${type === 'error' ? 'bg-red-600/90 text-white' : 'bg-emerald-600/90 text-white'}`;
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
 
-  <!-- Firebase and JavaScript -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  // Fetch holders via Alchemy
+  async function fetchHolders() {
+    const contract = document.getElementById('contractInput').value.trim();
+    const apiKey = document.getElementById('apiKeyInput').value.trim();
+    const network = document.getElementById('networkSelect').value;
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCJbHkhvgfbM1Hymh23jIePb9c-BbZz4_Y",
-      authDomain: "neuroai-114fa.firebaseapp.com",
-      databaseURL: "https://neuroai-114fa-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "neuroai-114fa",
-      storageBucket: "neuroai-114fa.firebasestorage.app",
-      messagingSenderId: "483447356004",
-      appId: "1:483447356004:web:03df2903d16b446a47bd71"
-    };
+    if (!contract || !apiKey) { showToast('Please enter both contract address and API key.'); return; }
+    if (!/^0x[a-fA-F0-9]{40}$/.test(contract)) { showToast('Invalid contract address format.'); return; }
 
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
+    const btn = document.getElementById('fetchBtn');
+    const btnText = document.getElementById('fetchBtnText');
+    btn.disabled = true;
+    btnText.textContent = 'Fetching…';
 
-    window.subscribe = () => {
-      const email = document.getElementById('emailInput').value.trim();
-      if (!email) {
-        alert('Please enter a valid email.');
-        return;
-      }
-      const subscriptionsRef = ref(database, 'subscriptions');
-      push(subscriptionsRef, {
-        email,
-        timestamp: Date.now()
+    document.getElementById('progressSection').classList.remove('hidden');
+    document.getElementById('resultsSection').classList.add('hidden');
+    holdersData = [];
+
+    const baseUrl = `https://${network}.g.alchemy.com/v2/${apiKey}/getOwnersForCollection`;
+    let pageKey = '';
+    let totalFetched = 0;
+
+    try {
+      do {
+        const url = pageKey ? `${baseUrl}?contractAddress=${contract}&withTokenBalances=true&pageKey=${pageKey}` : `${baseUrl}?contractAddress=${contract}&withTokenBalances=true`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error?.message || `API error ${res.status}`);
+        }
+        const data = await res.json();
+
+        if (data.ownerAddresses) {
+          data.ownerAddresses.forEach(o => {
+            const balance = o.tokenBalances ? o.tokenBalances.reduce((s, t) => s + parseInt(t.balance, 10), 0) : 1;
+            holdersData.push({ address: o.ownerAddress, balance });
+          });
+          totalFetched = holdersData.length;
+          document.getElementById('progressCount').textContent = totalFetched.toLocaleString();
+          document.getElementById('progressBar').style.width = pageKey ? '60%' : '30%';
+        }
+
+        pageKey = data.pageKey || '';
+      } while (pageKey);
+
+      document.getElementById('progressBar').style.width = '100%';
+      document.getElementById('progressMsg').textContent = 'Done!';
+
+      // Sort by balance desc
+      holdersData.sort((a, b) => b.balance - a.balance);
+      renderResults();
+      showToast(`Found ${holdersData.length.toLocaleString()} unique holders!`, 'success');
+
+    } catch (e) {
+      showToast(e.message || 'Failed to fetch holders.');
+      document.getElementById('progressSection').classList.add('hidden');
+    } finally {
+      btn.disabled = false;
+      btnText.textContent = 'Fetch Holders';
+    }
+  }
+
+  function renderResults() {
+    document.getElementById('resultsSection').classList.remove('hidden');
+    document.getElementById('statHolders').textContent = holdersData.length.toLocaleString();
+    const totalSupply = holdersData.reduce((s, h) => s + h.balance, 0);
+    document.getElementById('statSupply').textContent = totalSupply.toLocaleString();
+    document.getElementById('resultTitle').textContent = `${holdersData.length.toLocaleString()} Holders Found`;
+
+    const tbody = document.getElementById('previewTable');
+    tbody.innerHTML = holdersData.slice(0, 50).map((h, i) =>
+      `<tr class="border-b border-white/5 hover:bg-white/[0.02]">
+        <td class="py-1.5 px-2 text-gray-500">${i + 1}</td>
+        <td class="py-1.5 px-2 truncate max-w-[200px]">${h.address}</td>
+        <td class="py-1.5 px-2 text-right text-violet-300">${h.balance}</td>
+      </tr>`
+    ).join('');
+  }
+
+  function downloadCSV() {
+    if (!holdersData.length) return;
+    const contract = document.getElementById('contractInput').value.trim();
+    let csv = 'rank,address,balance\n';
+    holdersData.forEach((h, i) => { csv += `${i + 1},${h.address},${h.balance}\n`; });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nft_holders_${contract.slice(0, 8)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('CSV downloaded!', 'success');
+  }
+
+  // Element SDK
+  const defaultConfig = {
+    site_title: 'NFT Holder Snapshot',
+    subtitle_text: "Export any NFT collection's holder addresses as a CSV — powered by public APIs.",
+    background_color: '#0a0a0f',
+    surface_color: '#1a0a2e',
+    text_color: '#e5e7eb',
+    primary_action_color: '#7c3aed',
+    secondary_action_color: '#8b5cf6',
+    font_family: 'Sora',
+    font_size: 16
+  };
+
+  function applyConfig(config) {
+    const c = { ...defaultConfig, ...config };
+    document.getElementById('siteTitle').textContent = c.site_title;
+    document.getElementById('subtitleText').textContent = c.subtitle_text;
+
+    const font = c.font_family || defaultConfig.font_family;
+    document.getElementById('siteTitle').style.fontFamily = `${font}, sans-serif`;
+    document.getElementById('subtitleText').style.fontFamily = `${font}, sans-serif`;
+
+    const base = c.font_size || defaultConfig.font_size;
+    document.getElementById('subtitleText').style.fontSize = `${base}px`;
+  }
+
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (config) => applyConfig(config),
+    mapToCapabilities: (config) => {
+      const c = { ...defaultConfig, ...config };
+      const mk = (key) => ({
+        get: () => c[key] || defaultConfig[key],
+        set: (v) => { c[key] = v; window.elementSdk.setConfig({ [key]: v }); }
       });
-      alert('Subscribed successfully!');
-      document.getElementById('emailInput').value = '';
-    };
-
-    // Banner Carousel
-    const carousel = document.getElementById('bannerCarousel');
-    const dots = document.querySelectorAll('.dot');
-    let currentIndex = 0;
-    const banners = document.querySelectorAll('.banner-card');
-    function updateCarousel() {
-      carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentIndex);
-      });
+      return {
+        recolorables: [mk('background_color'), mk('surface_color'), mk('text_color'), mk('primary_action_color'), mk('secondary_action_color')],
+        borderables: [],
+        fontEditable: mk('font_family'),
+        fontSizeable: mk('font_size')
+      };
+    },
+    mapToEditPanelValues: (config) => {
+      const c = { ...defaultConfig, ...config };
+      return new Map([
+        ['site_title', c.site_title],
+        ['subtitle_text', c.subtitle_text]
+      ]);
     }
-    function goToSlide(index) {
-      currentIndex = index;
-      updateCarousel();
-    }
-    function slideBanners() {
-      currentIndex = (currentIndex + 1) % banners.length;
-      updateCarousel();
-    }
-    setInterval(slideBanners, 3000);
-    updateCarousel();
+  });
 
-    // Dropdown Toggle
-    window.toggleDropdown = (id) => {
-      const dropdown = document.getElementById(id);
-      dropdown.classList.toggle('active');
-    };
-
-    // Video Section Toggle
-    const videoSection = document.getElementById('video-section');
-    window.toggleVideos = () => {
-      videoSection.classList.toggle('active');
-    };
-  </script>
-</body>
+  lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fc5233172c90ed7',t:'MTc3ODg3OTUxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
