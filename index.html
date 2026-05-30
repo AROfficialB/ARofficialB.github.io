@@ -11,238 +11,42 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      background: #008080;
-      font-family: 'VT323', 'Press Start 2P', monospace;
-      overflow-x: hidden;
-      padding: 20px;
-    }
-    
+    body { background: #008080; font-family: 'VT323', 'Press Start 2P', monospace; overflow-x: hidden; padding: 20px; }
     .win95-desktop { max-width: 1400px; margin: 0 auto; }
-    
-    .win95-window {
-      background: #c0c0c0;
-      border: 3px solid;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      margin-bottom: 20px;
-    }
-    
-    .win95-titlebar {
-      background: #000080;
-      color: #ffffff;
-      padding: 6px 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 11px;
-    }
-    
-    .win95-titlebar button {
-      background: #c0c0c0;
-      border: 2px solid;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      width: 22px;
-      height: 22px;
-      cursor: pointer;
-    }
-    
+    .win95-window { background: #c0c0c0; border: 3px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #808080; border-bottom-color: #808080; margin-bottom: 20px; }
+    .win95-titlebar { background: #000080; color: #ffffff; padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; font-family: 'Press Start 2P', monospace; font-size: 11px; }
+    .win95-titlebar button { background: #c0c0c0; border: 2px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #808080; border-bottom-color: #808080; width: 22px; height: 22px; cursor: pointer; }
     .win95-content { padding: 16px; background: #c0c0c0; }
-    
-    .win95-btn {
-      background: #c0c0c0;
-      border: 3px solid;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      padding: 8px 16px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      cursor: pointer;
-    }
-    
-    .win95-btn:active {
-      border-top-color: #808080;
-      border-left-color: #808080;
-      border-right-color: #ffffff;
-      border-bottom-color: #ffffff;
-      transform: translate(1px, 1px);
-    }
-    
-    .win95-input {
-      background: #ffffff;
-      border: 2px inset #808080;
-      padding: 8px 12px;
-      font-family: 'VT323', monospace;
-      font-size: 14px;
-      width: 100%;
-      outline: none;
-    }
-    
-    .win95-select {
-      background: #ffffff;
-      border: 2px inset #808080;
-      padding: 8px 12px;
-      font-family: 'VT323', monospace;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    
-    .layer-item {
-      background: #d4d0c8;
-      border: 2px solid;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      cursor: pointer;
-      padding: 8px;
-    }
-    
-    .layer-item.selected {
-      background: #000080;
-      border: 2px solid #ffffff;
-    }
-    
+    .win95-btn { background: #c0c0c0; border: 3px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #808080; border-bottom-color: #808080; padding: 8px 16px; font-family: 'Press Start 2P', monospace; font-size: 10px; cursor: pointer; }
+    .win95-btn:active { border-top-color: #808080; border-left-color: #808080; border-right-color: #ffffff; border-bottom-color: #ffffff; transform: translate(1px, 1px); }
+    .win95-input { background: #ffffff; border: 2px inset #808080; padding: 8px 12px; font-family: 'VT323', monospace; font-size: 14px; width: 100%; outline: none; }
+    .win95-select { background: #ffffff; border: 2px inset #808080; padding: 8px 12px; font-family: 'VT323', monospace; font-size: 14px; cursor: pointer; }
+    .layer-item { background: #d4d0c8; border: 2px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #808080; border-bottom-color: #808080; cursor: pointer; padding: 8px; }
+    .layer-item.selected { background: #000080; border: 2px solid #ffffff; }
     .layer-item.selected p { color: #ffffff !important; }
-    
-    .qty-input {
-      background: #ffffff;
-      border: 2px inset #808080;
-      padding: 6px 8px;
-      width: 70px;
-      text-align: center;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-    }
-    
-    .win95-tab {
-      background: #c0c0c0;
-      border: 3px solid;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      padding: 8px 20px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      cursor: pointer;
-      margin-right: 4px;
-    }
-    
-    .win95-tab.active {
-      border-top-color: #808080;
-      border-left-color: #808080;
-      border-right-color: #ffffff;
-      border-bottom-color: #ffffff;
-    }
-    
-    .nft-card {
-      background: #d4d0c8;
-      border: 3px solid;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      cursor: pointer;
-    }
-    
-    .progress-bar {
-      background: #ffffff;
-      border: 2px inset #808080;
-      height: 20px;
-    }
-    
-    .progress-fill {
-      background: #000080;
-      height: 100%;
-      width: 0%;
-      transition: width 0.1s;
-    }
-    
-    .order-tag {
-      background: #d4d0c8;
-      border: 2px solid;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      padding: 4px 10px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 8px;
-    }
-    
-    #toast {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #c0c0c0;
-      border: 3px solid;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      padding: 10px 20px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      z-index: 10000;
-    }
-    
+    .qty-input { background: #ffffff; border: 2px inset #808080; padding: 6px 8px; width: 70px; text-align: center; font-family: 'Press Start 2P', monospace; font-size: 10px; }
+    .win95-tab { background: #c0c0c0; border: 3px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #808080; border-bottom-color: #808080; padding: 8px 20px; font-family: 'Press Start 2P', monospace; font-size: 10px; cursor: pointer; margin-right: 4px; }
+    .win95-tab.active { border-top-color: #808080; border-left-color: #808080; border-right-color: #ffffff; border-bottom-color: #ffffff; }
+    .nft-card { background: #d4d0c8; border: 3px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #808080; border-bottom-color: #808080; cursor: pointer; }
+    .progress-bar { background: #ffffff; border: 2px inset #808080; height: 20px; }
+    .progress-fill { background: #000080; height: 100%; width: 0%; transition: width 0.1s; }
+    .order-tag { background: #d4d0c8; border: 2px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #808080; border-bottom-color: #808080; padding: 4px 10px; font-family: 'Press Start 2P', monospace; font-size: 8px; }
+    #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #c0c0c0; border: 3px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #808080; border-bottom-color: #808080; padding: 10px 20px; font-family: 'Press Start 2P', monospace; font-size: 10px; z-index: 10000; }
     .hidden { display: none; }
     .text-pixel { font-family: 'Press Start 2P', monospace; }
     .grid-2cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     @media(max-width: 640px) { .grid-2cols { grid-template-columns: 1fr; } }
-    
-    .layer-row {
-      background: #d4d0c8;
-      border: 2px outset #808080;
-      padding: 8px;
-      margin-bottom: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .move-btn {
-      background: #c0c0c0;
-      border: 2px solid;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      padding: 4px 8px;
-      cursor: pointer;
-      font-family: monospace;
-      font-size: 12px;
-    }
-    
-    .search-input {
-      background: #ffffff;
-      border: 2px inset #808080;
-      padding: 8px 12px;
-      font-family: 'VT323', monospace;
-      font-size: 16px;
-      width: 200px;
-    }
+    .layer-row { background: #d4d0c8; border: 2px outset #808080; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .move-btn { background: #c0c0c0; border: 2px solid; border-top-color: #ffffff; border-left-color: #ffffff; border-right-color: #808080; border-bottom-color: #808080; padding: 5px 10px; cursor: pointer; font-family: monospace; font-size: 14px; margin-left: 5px; }
+    .move-btn:active { border-top-color: #808080; border-left-color: #808080; border-right-color: #ffffff; border-bottom-color: #ffffff; transform: translate(1px, 1px); }
+    .move-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .search-input { background: #ffffff; border: 2px inset #808080; padding: 8px 12px; font-family: 'VT323', monospace; font-size: 16px; width: 200px; }
   </style>
 </head>
 <body>
 <div class="win95-desktop">
   <div class="win95-window">
-    <div class="win95-titlebar">
-      <span>📁 404 PUNKS GENERATOR - v95.RETRO</span>
-      <button onclick="location.reload()">✕</button>
-    </div>
-    
+    <div class="win95-titlebar"><span>📁 404 PUNKS GENERATOR - v95.RETRO</span><button onclick="location.reload()">✕</button></div>
     <div style="background: #c0c0c0; padding: 8px 16px 0 16px;">
       <div style="display: flex; gap: 4px; flex-wrap: wrap;">
         <button onclick="App.switchTab('layers')" id="tab-layers" class="win95-tab active">📂 LAYERS</button>
@@ -250,80 +54,27 @@
         <button onclick="App.switchTab('collection')" id="tab-collection" class="win95-tab">📋 COLLECTION</button>
       </div>
     </div>
-    
     <div class="win95-content">
-      <!-- LAYERS PANEL -->
       <div id="panel-layers">
         <div class="win95-window" style="margin-bottom: 16px;">
           <div class="win95-titlebar" style="background: #808080;">➕ ADD NEW LAYER</div>
           <div class="win95-content">
             <input id="github-url" placeholder="[ IMAGE URL ]" class="win95-input w-full mb-2">
-            <div class="flex gap-2 mb-2 flex-wrap">
-              <input id="layer-value" placeholder="[ VALUE ]" class="win95-input flex-1">
-              <select id="layer-section" class="win95-select flex-1">
-                <option value="Background">Background</option><option value="Base">Base</option><option value="Nose">Nose</option>
-                <option value="Face">Face</option><option value="Accessory">Accessory</option><option value="Mouth">Mouth</option>
-                <option value="Eyes">Eyes</option><option value="Head">Head</option><option value="Neck">Neck</option>
-                <option value="Ear">Ear</option><option value="Beard">Beard</option>
-              </select>
-            </div>
-            <div class="flex gap-4 mb-3">
-              <label><input type="radio" name="layer-gender" value="male" checked> ♂ MALE</label>
-              <label><input type="radio" name="layer-gender" value="female"> ♀ FEMALE</label>
-              <label><input type="radio" name="layer-gender" value="both"> ⚥ BOTH</label>
-            </div>
+            <div class="flex gap-2 mb-2 flex-wrap"><input id="layer-value" placeholder="[ VALUE ]" class="win95-input flex-1"><select id="layer-section" class="win95-select flex-1"><option value="Background">Background</option><option value="Base">Base</option><option value="Nose">Nose</option><option value="Face">Face</option><option value="Accessory">Accessory</option><option value="Mouth">Mouth</option><option value="Eyes">Eyes</option><option value="Head">Head</option><option value="Neck">Neck</option><option value="Ear">Ear</option><option value="Beard">Beard</option></select></div>
+            <div class="flex gap-4 mb-3"><label><input type="radio" name="layer-gender" value="male" checked> ♂ MALE</label><label><input type="radio" name="layer-gender" value="female"> ♀ FEMALE</label><label><input type="radio" name="layer-gender" value="both"> ⚥ BOTH</label></div>
             <button onclick="App.addLayer()" class="win95-btn w-full">📀 ADD TO LIBRARY</button>
           </div>
         </div>
         <div id="sections-container" class="space-y-3"></div>
       </div>
-      
-      <!-- CREATE PANEL -->
       <div id="panel-create" class="hidden">
         <div id="create-sections-container" class="space-y-3 mb-4"></div>
-        
-        <div class="win95-window">
-          <div class="win95-titlebar" style="background: #808080;">🎮 LAYER ORDER & PREVIEW</div>
-          <div class="win95-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-              <div><div class="text-pixel text-[8px] mb-2">ORDER (BOTTOM → TOP)</div><div id="order-preview-list" class="flex flex-wrap gap-2"></div></div>
-              <canvas id="live-preview-canvas" width="96" height="96" style="border: 3px outset #808080; background: #fff;"></canvas>
-            </div>
-          </div>
-        </div>
-        
-        <div class="win95-window" style="margin-top: 16px;">
-          <div class="win95-titlebar" style="background: #808080;">⚙️ MINT SETTINGS</div>
-          <div class="win95-content">
-            <div class="flex gap-3 mb-3 flex-wrap">
-              <div class="flex-1"><div class="text-pixel text-[8px] mb-1">TOTAL NFTS</div><input type="number" id="total-nft-count" min="1" max="500" value="10" class="qty-input w-full"></div>
-              <div class="flex-1"><div class="text-pixel text-[8px] mb-1">NAME PREFIX</div><input type="text" id="name-prefix" value="PUNK#" class="win95-input w-full" style="font-size: 12px;"></div>
-            </div>
-            <textarea id="nft-description" rows="2" class="win95-input w-full mb-3">404 PUNKS // RETRO GLITCH COLLECTION</textarea>
-            <button id="bulk-mint-btn" onclick="App.startMint()" class="win95-btn w-full">🎮 MINT NFTs</button>
-            <div id="progress-wrap" class="hidden mt-3"><div class="flex justify-between text-pixel text-[8px] mb-1"><span id="progress-text">MINTING...</span><span id="progress-counter">0/0</span></div><div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div></div>
-          </div>
-        </div>
-        
-        <div class="win95-window" style="margin-top: 16px;">
-          <div class="win95-titlebar" style="background: #808080;">🗑️ BATCH ACTIONS</div>
-          <div class="win95-content"><div class="flex gap-3"><button onclick="App.deleteAllNFTs()" class="win95-btn flex-1" style="border-color:#ff4444;color:#aa0000;">🗑️ DELETE ALL</button><button onclick="App.downloadAllAsZip()" class="win95-btn flex-1">📦 DOWNLOAD ALL</button></div></div>
-        </div>
+        <div class="win95-window"><div class="win95-titlebar" style="background: #808080;">🎮 LAYER ORDER & PREVIEW</div><div class="win95-content"><div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;"><div><div class="text-pixel text-[8px] mb-2">ORDER (BOTTOM → TOP)</div><div id="order-preview-list" class="flex flex-wrap gap-2"></div></div><canvas id="live-preview-canvas" width="96" height="96" style="border: 3px outset #808080; background: #fff;"></canvas></div></div></div>
+        <div class="win95-window" style="margin-top: 16px;"><div class="win95-titlebar" style="background: #808080;">⚙️ MINT SETTINGS</div><div class="win95-content"><div class="flex gap-3 mb-3 flex-wrap"><div class="flex-1"><div class="text-pixel text-[8px] mb-1">TOTAL NFTS</div><input type="number" id="total-nft-count" min="1" max="500" value="10" class="qty-input w-full"></div><div class="flex-1"><div class="text-pixel text-[8px] mb-1">NAME PREFIX</div><input type="text" id="name-prefix" value="PUNK#" class="win95-input w-full" style="font-size: 12px;"></div></div><textarea id="nft-description" rows="2" class="win95-input w-full mb-3">404 PUNKS // RETRO GLITCH COLLECTION</textarea><button id="bulk-mint-btn" onclick="App.startMint()" class="win95-btn w-full">🎮 MINT NFTs</button><div id="progress-wrap" class="hidden mt-3"><div class="flex justify-between text-pixel text-[8px] mb-1"><span id="progress-text">MINTING...</span><span id="progress-counter">0/0</span></div><div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div></div></div></div>
+        <div class="win95-window" style="margin-top: 16px;"><div class="win95-titlebar" style="background: #808080;">🗑️ BATCH ACTIONS</div><div class="win95-content"><div class="flex gap-3"><button onclick="App.deleteAllNFTs()" class="win95-btn flex-1" style="border-color:#ff4444;color:#aa0000;">🗑️ DELETE ALL</button><button onclick="App.downloadAllAsZip()" class="win95-btn flex-1">📦 DOWNLOAD ALL</button></div></div></div>
       </div>
-      
-      <!-- COLLECTION PANEL with SEARCH -->
       <div id="panel-collection" class="hidden">
-        <div class="win95-window" style="margin-bottom: 16px;">
-          <div class="win95-titlebar" style="background: #808080;">🔍 SEARCH NFTS</div>
-          <div class="win95-content">
-            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-              <input type="text" id="search-range" placeholder="555-1500 or single number" class="search-input" style="flex:2;">
-              <button onclick="App.searchNFTs()" class="win95-btn">🔍 SEARCH</button>
-              <button onclick="App.clearSearch()" class="win95-btn">🗑️ CLEAR</button>
-            </div>
-            <div class="text-pixel text-[8px] mt-2">💡 Example: "100-500" or "42" or "1000"</div>
-          </div>
-        </div>
+        <div class="win95-window" style="margin-bottom: 16px;"><div class="win95-titlebar" style="background: #808080;">🔍 SEARCH NFTS</div><div class="win95-content"><div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;"><input type="text" id="search-range" placeholder="555-1500 or single number" class="search-input" style="flex:2;"><button onclick="App.searchNFTs()" class="win95-btn">🔍 SEARCH</button><button onclick="App.clearSearch()" class="win95-btn">🗑️ CLEAR</button></div><div class="text-pixel text-[8px] mt-2">💡 Example: "100-500" or "42"</div></div></div>
         <div id="nft-count" class="mb-3"></div>
         <div id="nft-list" class="grid-2cols"></div>
         <p id="nft-empty" class="text-center text-pixel text-xs mt-10 hidden">[ NO NFTS FOUND ]</p>
@@ -503,13 +254,12 @@
         if(shouldAdd){
           let randomLayer = filtered[Math.floor(Math.random()*filtered.length)];
           if(section === 'Base') baseValue = randomLayer.value;
-          selectedForNFT.push({ ...randomLayer, section });
+          selectedForNFT.push({ ...randomLayer, section, orderIndex: selectedForNFT.length });
           if(section !== "Background") attributes.push({ trait_type: section, value: randomLayer.value });
           else attributes.push({ trait_type: "Background", value: randomLayer.value });
         }
       }
       
-      // Filter out Beard if base is Alien/Ape
       if(!checkBeardAllowed(baseValue)){
         selectedForNFT = selectedForNFT.filter(l => l.section !== 'Beard');
         attributes = attributes.filter(a => a.trait_type !== 'Beard');
@@ -526,7 +276,7 @@
           });
           if(filtered.length){
             let randomLayer = filtered[0];
-            selectedForNFT.push({ ...randomLayer, section });
+            selectedForNFT.push({ ...randomLayer, section, orderIndex: selectedForNFT.length });
             if(section !== "Background") attributes.push({ trait_type: section, value: randomLayer.value });
             else attributes.push({ trait_type: "Background", value: randomLayer.value });
             break;
@@ -558,7 +308,6 @@
     progWrap.classList.add('hidden');
   }
   
-  // SEARCH FUNCTION
   function searchNFTs(){
     let searchVal = document.getElementById('search-range').value.trim();
     if(!searchVal){ filteredNFTs = null; renderCollection(); return; }
@@ -578,8 +327,8 @@
   
   function clearSearch(){ filteredNFTs = null; document.getElementById('search-range').value = ''; renderCollection(); }
   
-  // EDIT NFT LAYERS (Move Up/Down)
-  async function editNFT(nftId, layerIndex, direction){
+  // FIXED: EDIT NFT LAYERS - Move Up/Down
+  async function editNFTLayer(nftId, layerIndex, direction){
     let nft = nfts.find(n=>n.id===nftId);
     if(!nft || !nft.layers) return;
     let newLayers = [...nft.layers];
@@ -587,14 +336,12 @@
       [newLayers[layerIndex], newLayers[layerIndex-1]] = [newLayers[layerIndex-1], newLayers[layerIndex]];
     } else if(direction === 'down' && layerIndex < newLayers.length-1){
       [newLayers[layerIndex], newLayers[layerIndex+1]] = [newLayers[layerIndex+1], newLayers[layerIndex]];
-    }
-    // Update orderIndex
+    } else { return; }
+    
     newLayers.forEach((l,idx)=> l.orderIndex = idx);
     nft.layers = newLayers;
-    // Re-composite image
     let imgData = await compositeFromLayers(newLayers);
     nft.image = imgData;
-    // Update attributes order
     let newAttrs = [];
     for(let l of newLayers){
       if(l.section !== "Background") newAttrs.push({ trait_type: l.section, value: l.value });
@@ -603,11 +350,13 @@
     nft.attributes = newAttrs;
     await updateNFTsInFirebase();
     renderCollection();
-    showToast('LAYER ORDER UPDATED');
+    showToast(`LAYER MOVED ${direction.toUpperCase()}`);
+    // Re-open the modal with updated data
+    viewNFTDetails(nftId);
   }
   
-  // DELETE specific layer from NFT
-  async function deleteLayerFromNFT(nftId, layerIndex){
+  // FIXED: DELETE specific layer from NFT
+  async function deleteNFTLayer(nftId, layerIndex){
     let nft = nfts.find(n=>n.id===nftId);
     if(!nft || !nft.layers) return;
     let removedLayer = nft.layers[layerIndex];
@@ -625,6 +374,7 @@
       await updateNFTsInFirebase();
       renderCollection();
       showToast(`REMOVED: ${removedLayer.section}`);
+      viewNFTDetails(nftId);
     }
   }
   
@@ -635,7 +385,7 @@
     empty.classList.toggle('hidden', displayNFTs.length>0);
     countDiv.innerHTML=displayNFTs.length?`<div class="order-tag">📊 SHOWING ${displayNFTs.length} / ${nfts.length} PUNKS</div>`:'';
     if(!displayNFTs.length){ container.innerHTML=''; return; }
-    container.innerHTML=displayNFTs.map((nft,serial)=>`<div class="nft-card" style="padding:12px;"><div style="aspect-ratio:1; background:#fff; margin-bottom:10px; border:2px inset #808080;"><img src="${nft.image}" style="width:100%;height:100%;object-fit:contain;"></div><div class="text-pixel text-[8px] text-center">${escapeHtml(nft.name)}</div><div style="display:flex; gap:5px; margin-top:8px; flex-wrap:wrap;"><button onclick="App.viewNFTDetails('${nft.id}')" class="win95-btn" style="padding:4px; font-size:7px; flex:1;">📝 EDIT</button><button onclick="App.downloadSingleImage('${nft.id}', ${serial+1})" class="win95-btn" style="padding:4px; font-size:7px; flex:1;">PNG</button><button onclick="App.downloadSingleJSON('${nft.id}', ${serial+1})" class="win95-btn" style="padding:4px; font-size:7px; flex:1;">JSON</button><button onclick="App.deleteSingleNFT('${nft.id}')" class="win95-btn" style="padding:4px; font-size:7px; flex:1; border-color:#ff4444;">DEL</button></div></div>`).join('');
+    container.innerHTML=displayNFTs.map((nft,idx)=>`<div class="nft-card" style="padding:12px;"><div style="aspect-ratio:1; background:#fff; margin-bottom:10px; border:2px inset #808080;"><img src="${nft.image}" style="width:100%;height:100%;object-fit:contain;"></div><div class="text-pixel text-[8px] text-center">${escapeHtml(nft.name)}</div><div style="display:flex; gap:5px; margin-top:8px; flex-wrap:wrap;"><button onclick="App.viewNFTDetails('${nft.id}')" class="win95-btn" style="padding:4px; font-size:7px; flex:1;">📝 EDIT</button><button onclick="App.downloadSingleImage('${nft.id}', ${idx+1})" class="win95-btn" style="padding:4px; font-size:7px; flex:1;">PNG</button><button onclick="App.downloadSingleJSON('${nft.id}', ${idx+1})" class="win95-btn" style="padding:4px; font-size:7px; flex:1;">JSON</button><button onclick="App.deleteSingleNFT('${nft.id}')" class="win95-btn" style="padding:4px; font-size:7px; flex:1; border-color:#ff4444;">DEL</button></div></div>`).join('');
   }
   
   async function viewNFTDetails(id){
@@ -643,8 +393,8 @@
     if(!nft || !nft.layers) return;
     let modal = document.createElement('div');
     modal.style.position='fixed'; modal.style.top=0; modal.style.left=0; modal.style.width='100%'; modal.style.height='100%'; modal.style.background='rgba(0,0,0,0.8)'; modal.style.display='flex'; modal.style.alignItems='center'; modal.style.justifyContent='center'; modal.style.zIndex=10000;
-    let layersHtml = nft.layers.map((l,idx)=>`<div class="layer-row"><span><span class="text-pixel text-[8px] mr-2">${idx+1}.</span> ${l.section}: ${escapeHtml(l.value)}</span><div><button onclick="App.editNFTLayer('${id}',${idx},'up')" class="move-btn" ${idx===0?'disabled style="opacity:0.5"':''}>▲</button><button onclick="App.editNFTLayer('${id}',${idx},'down')" class="move-btn ml-1" ${idx===nft.layers.length-1?'disabled style="opacity:0.5"':''}>▼</button><button onclick="App.deleteNFTLayer('${id}',${idx})" class="move-btn ml-1" style="border-color:#ff4444;">✕</button></div></div>`).join('');
-    modal.innerHTML=`<div class="win95-window" style="width:90%; max-width:500px;"><div class="win95-titlebar"><span>✏️ EDIT: ${escapeHtml(nft.name)}</span><button onclick="this.closest('.win95-window').parentElement.remove()">✕</button></div><div class="win95-content"><img src="${nft.image}" style="width:100%; margin-bottom:15px; border:3px outset #808080;"><div class="text-pixel text-[8px] mb-2">LAYERS (click ▲▼ to reorder, ✕ to delete)</div><div style="max-height:300px; overflow:auto;">${layersHtml}</div><div class="flex gap-3 mt-3"><button onclick="App.downloadSingleImage('${id}');this.closest('.win95-window').parentElement.remove()" class="win95-btn flex-1">📸 DOWNLOAD PNG</button><button onclick="App.downloadSingleJSON('${id}');this.closest('.win95-window').parentElement.remove()" class="win95-btn flex-1">📄 DOWNLOAD JSON</button></div></div></div>`;
+    let layersHtml = nft.layers.map((l,idx)=>`<div class="layer-row"><span><span class="text-pixel text-[8px] mr-2">${idx+1}.</span> ${l.section}: ${escapeHtml(l.value)}</span><div><button onclick="App.editNFTLayer('${id}',${idx},'up')" class="move-btn" ${idx===0?'disabled style="opacity:0.5"':''}>▲</button><button onclick="App.editNFTLayer('${id}',${idx},'down')" class="move-btn" ${idx===nft.layers.length-1?'disabled style="opacity:0.5"':''}>▼</button><button onclick="App.deleteNFTLayer('${id}',${idx})" class="move-btn" style="border-color:#ff4444;">✕</button></div></div>`).join('');
+    modal.innerHTML=`<div class="win95-window" style="width:90%; max-width:500px; max-height:80vh; overflow:auto;"><div class="win95-titlebar"><span>✏️ EDIT: ${escapeHtml(nft.name)}</span><button onclick="this.closest('.win95-window').parentElement.remove()">✕</button></div><div class="win95-content"><img src="${nft.image}" style="width:100%; margin-bottom:15px; border:3px outset #808080;"><div class="text-pixel text-[8px] mb-2">LAYERS (click ▲▼ to reorder, ✕ to delete)</div><div style="max-height:300px; overflow:auto;">${layersHtml}</div><div class="flex gap-3 mt-3"><button onclick="App.downloadSingleImage('${id}');this.closest('.win95-window').parentElement.remove()" class="win95-btn flex-1">📸 DOWNLOAD PNG</button><button onclick="App.downloadSingleJSON('${id}');this.closest('.win95-window').parentElement.remove()" class="win95-btn flex-1">📄 DOWNLOAD JSON</button></div></div></div>`;
     document.body.appendChild(modal);
   }
   
@@ -694,7 +444,7 @@
     toggleSectionCreate:(s)=>{ openSectionCreate=openSectionCreate===s?null:s; renderCreateSections(); },
     addLayer, deleteLayer:deleteLayerFromFirebase, toggleLayerSelection, updateQuantity:updateSectionQuantity,
     startMint, deleteAllNFTs, downloadAllAsZip, viewNFTDetails, downloadSingleImage, downloadSingleJSON, deleteSingleNFT,
-    searchNFTs, clearSearch, editNFTLayer:editNFT, deleteNFTLayer:deleteLayerFromNFT
+    searchNFTs, clearSearch, editNFTLayer, deleteNFTLayer
   };
   
   async function init(){ await loadNFTsFromFirebase(); previewCtx=document.getElementById('live-preview-canvas')?.getContext('2d'); listenFirebase(); renderCreateSections(); }
