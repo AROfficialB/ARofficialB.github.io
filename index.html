@@ -42,12 +42,13 @@
     .move-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .search-input { background: #ffffff; border: 2px inset #808080; padding: 8px 12px; font-family: 'VT323', monospace; font-size: 16px; width: 200px; }
     .warning-text { color: #aa0000; font-family: 'Press Start 2P', monospace; font-size: 8px; margin-top: 5px; }
+    .info-text { color: #000080; font-family: 'Press Start 2P', monospace; font-size: 8px; margin-top: 5px; }
   </style>
 </head>
 <body>
 <div class="win95-desktop">
   <div class="win95-window">
-    <div class="win95-titlebar"><span>📁 404 PUNKS GENERATOR - v95.RETRO</span><button onclick="location.reload()">✕</button></div>
+    <div class="win95-titlebar"><span>📁 404 PUNKS GENERATOR - v95.RETRO (PUBLIC)</span><button onclick="location.reload()">✕</button></div>
     <div style="background: #c0c0c0; padding: 8px 16px 0 16px;">
       <div style="display: flex; gap: 4px; flex-wrap: wrap;">
         <button onclick="App.switchTab('layers')" id="tab-layers" class="win95-tab active">📂 LAYERS</button>
@@ -69,13 +70,22 @@
         <div id="sections-container" class="space-y-3"></div>
       </div>
       <div id="panel-create" class="hidden">
+        <div class="win95-window" style="margin-bottom: 16px;">
+          <div class="win95-titlebar" style="background: #808080;">📜 PUBLIC COLLECTION RULES</div>
+          <div class="win95-content">
+            <div class="info-text">✓ ALL NFTS ARE PUBLIC - Visible to everyone who visits this site</div>
+            <div class="info-text">✓ MAX 15,000 NFTS CAN BE MINTED IN ONE BATCH</div>
+            <div class="info-text">✓ NOSE, FACE, NECK, BEARD LAYERS ARE BLOCKED FOR ALIEN/APE BASE</div>
+            <div class="info-text">✓ LAYERS STACK IN THE ORDER YOU SELECT (First = Bottom)</div>
+          </div>
+        </div>
         <div id="create-sections-container" class="space-y-3 mb-4"></div>
         <div class="win95-window"><div class="win95-titlebar" style="background: #808080;">🎮 LAYER ORDER & PREVIEW</div><div class="win95-content"><div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;"><div><div class="text-pixel text-[8px] mb-2">ORDER (BOTTOM → TOP) - Select layers in the order you want them stacked</div><div id="order-preview-list" class="flex flex-wrap gap-2"></div></div><canvas id="live-preview-canvas" width="96" height="96" style="border: 3px outset #808080; background: #fff;"></canvas></div></div></div>
-        <div class="win95-window" style="margin-top: 16px;"><div class="win95-titlebar" style="background: #808080;">⚙️ MINT SETTINGS</div><div class="win95-content"><div class="flex gap-3 mb-3 flex-wrap"><div class="flex-1"><div class="text-pixel text-[8px] mb-1">TOTAL NFTS (MAX 15,000)</div><input type="number" id="total-nft-count" min="1" max="15000" value="10" class="qty-input w-full"></div><div class="flex-1"><div class="text-pixel text-[8px] mb-1">NAME PREFIX</div><input type="text" id="name-prefix" value="PUNK#" class="win95-input w-full" style="font-size: 12px;"></div></div><div class="warning-text">⚠️ WARNING: Minting 5000+ NFTs may take several minutes. Please be patient!</div><textarea id="nft-description" rows="2" class="win95-input w-full mb-3 mt-2">404 PUNKS // RETRO GLITCH COLLECTION</textarea><button id="bulk-mint-btn" onclick="App.startMint()" class="win95-btn w-full">🎮 MINT NFTs</button><div id="progress-wrap" class="hidden mt-3"><div class="flex justify-between text-pixel text-[8px] mb-1"><span id="progress-text">MINTING...</span><span id="progress-counter">0/0</span></div><div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div></div></div></div>
+        <div class="win95-window" style="margin-top: 16px;"><div class="win95-titlebar" style="background: #808080;">⚙️ MINT SETTINGS</div><div class="win95-content"><div class="flex gap-3 mb-3 flex-wrap"><div class="flex-1"><div class="text-pixel text-[8px] mb-1">TOTAL NFTS (MAX 15,000)</div><input type="number" id="total-nft-count" min="1" max="15000" value="10" class="qty-input w-full"></div><div class="flex-1"><div class="text-pixel text-[8px] mb-1">NAME PREFIX</div><input type="text" id="name-prefix" value="PUNK#" class="win95-input w-full" style="font-size: 12px;"></div></div><div class="warning-text">⚠️ WARNING: Minting 5000+ NFTs may take several minutes. Please be patient!</div><textarea id="nft-description" rows="2" class="win95-input w-full mb-3 mt-2">404 PUNKS // RETRO GLITCH COLLECTION</textarea><button id="bulk-mint-btn" onclick="App.startMint()" class="win95-btn w-full">🎮 MINT NFTs (PUBLIC)</button><div id="progress-wrap" class="hidden mt-3"><div class="flex justify-between text-pixel text-[8px] mb-1"><span id="progress-text">MINTING...</span><span id="progress-counter">0/0</span></div><div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div></div></div></div>
         <div class="win95-window" style="margin-top: 16px;"><div class="win95-titlebar" style="background: #808080;">🗑️ BATCH ACTIONS</div><div class="win95-content"><div class="flex gap-3"><button onclick="App.deleteAllNFTs()" class="win95-btn flex-1" style="border-color:#ff4444;color:#aa0000;">🗑️ DELETE ALL</button><button onclick="App.downloadAllAsZip()" class="win95-btn flex-1">📦 DOWNLOAD ALL</button></div><div class="warning-text mt-2">💡 For large collections, use search range to view specific NFTs</div></div></div>
       </div>
       <div id="panel-collection" class="hidden">
-        <div class="win95-window" style="margin-bottom: 16px;"><div class="win95-titlebar" style="background: #808080;">🔍 SEARCH NFTS</div><div class="win95-content"><div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;"><input type="text" id="search-range" placeholder="555-1500 or single number" class="search-input" style="flex:2;"><button onclick="App.searchNFTs()" class="win95-btn">🔍 SEARCH</button><button onclick="App.clearSearch()" class="win95-btn">🗑️ CLEAR</button></div><div class="text-pixel text-[8px] mt-2">💡 Example: "100-500" or "42" or "1-15000"</div></div></div>
+        <div class="win95-window" style="margin-bottom: 16px;"><div class="win95-titlebar" style="background: #808080;">🔍 SEARCH NFTS</div><div class="win95-content"><div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;"><input type="text" id="search-range" placeholder="555-1500 or single number" class="search-input" style="flex:2;"><button onclick="App.searchNFTs()" class="win95-btn">🔍 SEARCH</button><button onclick="App.clearSearch()" class="win95-btn">🗑️ CLEAR</button></div><div class="text-pixel text-[8px] mt-2">💡 Example: "100-500" or "42" or "1-15000"</div><div class="info-text mt-2">🌍 PUBLIC COLLECTION - All NFTs are visible to everyone!</div></div></div>
         <div id="nft-count" class="mb-3"></div>
         <div id="nft-list" class="grid-2cols"></div>
         <p id="nft-empty" class="text-center text-pixel text-xs mt-10 hidden">[ NO NFTS FOUND ]</p>
@@ -86,10 +96,12 @@
 <div id="toast" class="hidden"></div>
 
 <script>
-  const SECTIONS_ORDER = ["Background","Base","Neck","Face","Nose","Mouth","Eyes","Ear","Beard","Accessory","Head"];
+  const SECTIONS_ORDER = ["Background","Base","Nose","Face","Neck","Mouth","Eyes","Ear","Beard","Accessory","Head"];
   const MAX_TRAITS = 8;
   const MAX_NFT_LIMIT = 15000;
-  const NO_BEARD_BASES = ["Alien", "Ape"];
+  // These sections will be blocked if base is Alien or Ape
+  const BLOCKED_SECTIONS_FOR_ALIEN_APE = ["Nose", "Face", "Neck", "Beard"];
+  const ALIEN_APE_BASES = ["Alien", "Ape"];
   
   const firebaseConfig = {
     apiKey: "AIzaSyAOy69Mp1LDbiWE4594ssJvhihKAP89punks-db.firebaseapp.com",
@@ -214,10 +226,17 @@
     return canvas.toDataURL('image/png');
   }
   
-  function checkBeardAllowed(baseValue){
-    if(!baseValue) return true;
-    for(let forbid of NO_BEARD_BASES){ if(baseValue.toLowerCase().includes(forbid.toLowerCase())) return false; }
-    return true;
+  // Check if a section should be blocked based on base value
+  function isSectionBlockedForBase(section, baseValue){
+    if(!baseValue) return false;
+    for(let forbidBase of ALIEN_APE_BASES){
+      if(baseValue.toLowerCase().includes(forbidBase.toLowerCase())){
+        if(BLOCKED_SECTIONS_FOR_ALIEN_APE.includes(section)){
+          return true;
+        }
+      }
+    }
+    return false;
   }
   
   async function startMint(){
@@ -255,8 +274,37 @@
       let attributes = [];
       let baseValue = null;
       
+      // First pass to get base value
       for(let section of activeSections){
+        if(section === 'Base'){
+          let sectionLayers = selectedLayersPerSection[section];
+          let filtered = sectionLayers.filter(l => {
+            if(l.gender==='both') return true;
+            if(gender==='male' && l.gender==='male') return true;
+            if(gender==='female' && l.gender==='female') return true;
+            return false;
+          });
+          if(filtered.length){
+            let qty = sectionQuantities[section];
+            let shouldAdd = Math.random() < (qty / genderTotal);
+            if(shouldAdd){
+              let randomLayer = filtered[Math.floor(Math.random()*filtered.length)];
+              baseValue = randomLayer.value;
+              selectedForNFT.push({ ...randomLayer, section, orderIndex: randomLayer.orderIndex });
+              if(section !== "Background") attributes.push({ trait_type: section, value: randomLayer.value });
+            }
+          }
+        }
+      }
+      
+      // Second pass for other sections, applying block rules
+      for(let section of activeSections){
+        if(section === 'Base') continue;
         if(selectedForNFT.length >= MAX_TRAITS) break;
+        
+        // Check if this section should be blocked for current base
+        if(isSectionBlockedForBase(section, baseValue)) continue;
+        
         let sectionLayers = selectedLayersPerSection[section];
         let filtered = sectionLayers.filter(l => {
           if(l.gender==='both') return true;
@@ -271,20 +319,15 @@
         
         if(shouldAdd){
           let randomLayer = filtered[Math.floor(Math.random()*filtered.length)];
-          if(section === 'Base') baseValue = randomLayer.value;
           selectedForNFT.push({ ...randomLayer, section, orderIndex: randomLayer.orderIndex });
           if(section !== "Background") attributes.push({ trait_type: section, value: randomLayer.value });
           else attributes.push({ trait_type: "Background", value: randomLayer.value });
         }
       }
       
-      if(!checkBeardAllowed(baseValue)){
-        selectedForNFT = selectedForNFT.filter(l => l.section !== 'Beard');
-        attributes = attributes.filter(a => a.trait_type !== 'Beard');
-      }
-      
       if(!selectedForNFT.length){
         for(let section of activeSections){
+          if(isSectionBlockedForBase(section, baseValue)) continue;
           let sectionLayers = selectedLayersPerSection[section];
           let filtered = sectionLayers.filter(l => {
             if(l.gender==='both') return true;
@@ -316,7 +359,6 @@
         createdAt: new Date().toISOString()
       });
       
-      // Small delay to keep UI responsive
       if(idx % 50 === 0) await new Promise(r=>setTimeout(r,10));
     }
     
@@ -324,7 +366,7 @@
     await updateNFTsInFirebase();
     renderCollection();
     let elapsed = ((Date.now() - startTime)/1000).toFixed(1);
-    showToast(`✅ MINTED ${order.length} NFTS in ${elapsed}s! (${maleCount} MALE / ${femaleCount} FEMALE)`);
+    showToast(`✅ MINTED ${order.length} NFTS in ${elapsed}s! (${maleCount} MALE / ${femaleCount} FEMALE) - PUBLIC COLLECTION`);
     btn.disabled=false;
     progWrap.classList.add('hidden');
     progFill.style.width='0%';
@@ -402,7 +444,7 @@
     if(!container) return;
     let displayNFTs = filteredNFTs || nfts;
     empty.classList.toggle('hidden', displayNFTs.length>0);
-    countDiv.innerHTML=displayNFTs.length?`<div class="order-tag">📊 SHOWING ${displayNFTs.length} / ${nfts.length} PUNKS</div>`:'';
+    countDiv.innerHTML=displayNFTs.length?`<div class="order-tag">📊 SHOWING ${displayNFTs.length} / ${nfts.length} PUNKS (PUBLIC)</div>`:'';
     if(!displayNFTs.length){ container.innerHTML=''; return; }
     container.innerHTML=displayNFTs.map((nft,idx)=>`<div class="nft-card" style="padding:12px;"><div style="aspect-ratio:1; background:#fff; margin-bottom:10px; border:2px inset #808080;"><img src="${nft.image}" style="width:100%;height:100%;object-fit:contain;"></div><div class="text-pixel text-[8px] text-center">${escapeHtml(nft.name)}</div><div style="display:flex; gap:5px; margin-top:8px; flex-wrap:wrap;"><button onclick="App.viewNFTDetails('${nft.id}')" class="win95-btn" style="padding:4px; font-size:7px; flex:1;">📝 EDIT</button><button onclick="App.downloadSingleImage('${nft.id}', ${idx+1})" class="win95-btn" style="padding:4px; font-size:7px; flex:1;">PNG</button><button onclick="App.downloadSingleJSON('${nft.id}', ${idx+1})" class="win95-btn" style="padding:4px; font-size:7px; flex:1;">JSON</button><button onclick="App.deleteSingleNFT('${nft.id}')" class="win95-btn" style="padding:4px; font-size:7px; flex:1; border-color:#ff4444;">DEL</button></div></div>`).join('');
   }
@@ -417,8 +459,8 @@
     document.body.appendChild(modal);
   }
   
-  async function deleteAllNFTs(){ if(confirm('⚠️ DELETE ALL NFTS? This will remove from Firebase permanently!')){ nfts=[]; await updateNFTsInFirebase(); renderCollection(); showToast('ALL NFTS DELETED'); } }
-  async function deleteSingleNFT(id){ if(confirm('DELETE THIS NFT?')){ nfts=nfts.filter(x=>x.id!=id); await updateNFTsInFirebase(); renderCollection(); showToast('NFT DELETED'); } }
+  async function deleteAllNFTs(){ if(confirm('⚠️ DELETE ALL NFTS? This will remove from Firebase permanently! Everyone will lose access!')){ nfts=[]; await updateNFTsInFirebase(); renderCollection(); showToast('ALL NFTS DELETED FROM PUBLIC COLLECTION'); } }
+  async function deleteSingleNFT(id){ if(confirm('DELETE THIS NFT? This will remove from public collection!')){ nfts=nfts.filter(x=>x.id!=id); await updateNFTsInFirebase(); renderCollection(); showToast('NFT DELETED FROM PUBLIC COLLECTION'); } }
   
   async function downloadAllAsZip(){
     if(!nfts.length){ showToast('NO NFTS'); return; }
