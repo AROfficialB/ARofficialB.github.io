@@ -69,7 +69,7 @@
       </div>
       <div id="panel-create" class="hidden">
         <div id="create-sections-container" class="space-y-3 mb-4"></div>
-        <div class="win95-window"><div class="win95-titlebar" style="background: #808080;">🎮 LAYER ORDER & PREVIEW</div><div class="win95-content"><div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;"><div><div class="text-pixel text-[8px] mb-2">ORDER (BOTTOM → TOP)</div><div id="order-preview-list" class="flex flex-wrap gap-2"></div></div><canvas id="live-preview-canvas" width="96" height="96" style="border: 3px outset #808080; background: #fff;"></canvas></div></div></div>
+        <div class="win95-window"><div class="win95-titlebar" style="background: #808080;">🎮 LAYER ORDER & PREVIEW</div><div class="win95-content"><div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;"><div><div class="text-pixel text-[8px] mb-2">ORDER (BOTTOM → TOP) - Select layers in the order you want them stacked</div><div id="order-preview-list" class="flex flex-wrap gap-2"></div></div><canvas id="live-preview-canvas" width="96" height="96" style="border: 3px outset #808080; background: #fff;"></canvas></div></div></div>
         <div class="win95-window" style="margin-top: 16px;"><div class="win95-titlebar" style="background: #808080;">⚙️ MINT SETTINGS</div><div class="win95-content"><div class="flex gap-3 mb-3 flex-wrap"><div class="flex-1"><div class="text-pixel text-[8px] mb-1">TOTAL NFTS</div><input type="number" id="total-nft-count" min="1" max="500" value="10" class="qty-input w-full"></div><div class="flex-1"><div class="text-pixel text-[8px] mb-1">NAME PREFIX</div><input type="text" id="name-prefix" value="PUNK#" class="win95-input w-full" style="font-size: 12px;"></div></div><textarea id="nft-description" rows="2" class="win95-input w-full mb-3">404 PUNKS // RETRO GLITCH COLLECTION</textarea><button id="bulk-mint-btn" onclick="App.startMint()" class="win95-btn w-full">🎮 MINT NFTs</button><div id="progress-wrap" class="hidden mt-3"><div class="flex justify-between text-pixel text-[8px] mb-1"><span id="progress-text">MINTING...</span><span id="progress-counter">0/0</span></div><div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div></div></div></div>
         <div class="win95-window" style="margin-top: 16px;"><div class="win95-titlebar" style="background: #808080;">🗑️ BATCH ACTIONS</div><div class="win95-content"><div class="flex gap-3"><button onclick="App.deleteAllNFTs()" class="win95-btn flex-1" style="border-color:#ff4444;color:#aa0000;">🗑️ DELETE ALL</button><button onclick="App.downloadAllAsZip()" class="win95-btn flex-1">📦 DOWNLOAD ALL</button></div></div></div>
       </div>
@@ -108,7 +108,7 @@
   let filteredNFTs = null;
   let openSectionLayers = null, openSectionCreate = null;
   let previewCtx = null;
-  let nextLayerOrder = 0;
+  let globalOrderCounter = 0;
   
   SECTIONS_ORDER.forEach(s=>{ layersBySection[s]=[]; selectedLayersPerSection[s]=[]; sectionQuantities[s]=0; });
   
@@ -140,11 +140,18 @@
     document.getElementById('sections-container').innerHTML=html;
   }
   
+  // KEY FIX: When selecting a layer, it gets the current global order counter
+  // First selected = lowest order = bottom layer
   function toggleLayerSelection(section, layerId, value, imageUrl, gender){
     let selected = selectedLayersPerSection[section];
     let existingIdx = selected.findIndex(l=>l.layerId===layerId);
-    if(existingIdx !== -1) selected.splice(existingIdx,1);
-    else selected.push({ layerId, value, imageUrl, gender, orderIndex: nextLayerOrder++ });
+    if(existingIdx !== -1){
+      selected.splice(existingIdx,1);
+    } else {
+      // New layer gets the NEXT order number (higher number = higher in stack)
+      // But when rendering, we sort by orderIndex ascending (lower = bottom)
+      selected.push({ layerId, value, imageUrl, gender, orderIndex: globalOrderCounter++ });
+    }
     renderCreateSections();
     updateLivePreview();
   }
@@ -153,7 +160,12 @@
   
   function getAllSelectedLayersInOrder(){
     let all = [];
-    for(let s of SECTIONS_ORDER) for(let l of selectedLayersPerSection[s]) all.push({ ...l, section: s });
+    for(let s of SECTIONS_ORDER){
+      for(let l of selectedLayersPerSection[s]){
+        all.push({ ...l, section: s });
+      }
+    }
+    // Sort by orderIndex ascending - lower number = selected first = bottom layer
     all.sort((a,b)=>a.orderIndex - b.orderIndex);
     return all;
   }
@@ -183,21 +195,25 @@
     let div=document.getElementById('order-preview-list');
     if(!div) return;
     let all = getAllSelectedLayersInOrder();
-    if(!all.length){ div.innerHTML='<span class="order-tag">[ EMPTY ]</span>'; return; }
-    div.innerHTML=all.map((l,i)=>`<span class="order-tag">${i+1}. ${l.section}:${l.value}</span>`).join('');
+    if(!all.length){ div.innerHTML='<span class="order-tag">[ EMPTY - Click layers below to add ]</span>'; return; }
+    div.innerHTML=all.map((l,i)=>`<span class="order-tag">${i+1}. ${l.section}: ${l.value}</span>`).join('');
   }
   
   async function updateLivePreview(){
     if(!previewCtx){ let c=document.getElementById('live-preview-canvas'); if(c) previewCtx=c.getContext('2d'); else return; }
     previewCtx.fillStyle='#ffffff'; previewCtx.fillRect(0,0,96,96);
     let all = getAllSelectedLayersInOrder();
-    for(let l of all){ await new Promise(res=>{ let img=new Image(); img.crossOrigin="Anonymous"; img.onload=()=>{ previewCtx.drawImage(img,0,0,96,96); res(); }; img.onerror=()=>res(); img.src=l.imageUrl; }); }
+    for(let l of all){
+      await new Promise(res=>{ let img=new Image(); img.crossOrigin="Anonymous"; img.onload=()=>{ previewCtx.drawImage(img,0,0,96,96); res(); }; img.onerror=()=>res(); img.src=l.imageUrl; });
+    }
   }
   
   async function compositeFromLayers(layers, w=512,h=512){
     let canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
     let ctx=canvas.getContext('2d'); ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,w,h);
-    for(let l of layers){ await new Promise(res=>{ let img=new Image(); img.crossOrigin="Anonymous"; img.onload=()=>{ ctx.drawImage(img,0,0,w,h); res(); }; img.onerror=()=>res(); img.src=l.imageUrl; }); }
+    for(let l of layers){
+      await new Promise(res=>{ let img=new Image(); img.crossOrigin="Anonymous"; img.onload=()=>{ ctx.drawImage(img,0,0,w,h); res(); }; img.onerror=()=>res(); img.src=l.imageUrl; });
+    }
     return canvas.toDataURL('image/png');
   }
   
@@ -254,7 +270,7 @@
         if(shouldAdd){
           let randomLayer = filtered[Math.floor(Math.random()*filtered.length)];
           if(section === 'Base') baseValue = randomLayer.value;
-          selectedForNFT.push({ ...randomLayer, section, orderIndex: selectedForNFT.length });
+          selectedForNFT.push({ ...randomLayer, section, orderIndex: randomLayer.orderIndex });
           if(section !== "Background") attributes.push({ trait_type: section, value: randomLayer.value });
           else attributes.push({ trait_type: "Background", value: randomLayer.value });
         }
@@ -276,7 +292,7 @@
           });
           if(filtered.length){
             let randomLayer = filtered[0];
-            selectedForNFT.push({ ...randomLayer, section, orderIndex: selectedForNFT.length });
+            selectedForNFT.push({ ...randomLayer, section, orderIndex: randomLayer.orderIndex });
             if(section !== "Background") attributes.push({ trait_type: section, value: randomLayer.value });
             else attributes.push({ trait_type: "Background", value: randomLayer.value });
             break;
@@ -327,7 +343,6 @@
   
   function clearSearch(){ filteredNFTs = null; document.getElementById('search-range').value = ''; renderCollection(); }
   
-  // FIXED: EDIT NFT LAYERS - Move Up/Down
   async function editNFTLayer(nftId, layerIndex, direction){
     let nft = nfts.find(n=>n.id===nftId);
     if(!nft || !nft.layers) return;
@@ -351,11 +366,9 @@
     await updateNFTsInFirebase();
     renderCollection();
     showToast(`LAYER MOVED ${direction.toUpperCase()}`);
-    // Re-open the modal with updated data
     viewNFTDetails(nftId);
   }
   
-  // FIXED: DELETE specific layer from NFT
   async function deleteNFTLayer(nftId, layerIndex){
     let nft = nfts.find(n=>n.id===nftId);
     if(!nft || !nft.layers) return;
