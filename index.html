@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>BD Punks - Mobile Downloader</title>
+    <title>BD Punks - Folder Wise Download</title>
 
-    <!-- JSZip (CDN) -->
+    <!-- JSZip -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
     </script>
 
@@ -21,24 +21,13 @@
             font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
             background: #0a0a0a;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 16px;
             background-image: radial-gradient(circle at 20% 50%, #1a1a2e 0%, #0a0a0a 100%);
-            touch-action: manipulation;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 30px 24px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         /* ===== HEADER ===== */
@@ -46,7 +35,9 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            margin-bottom: 6px;
+            padding: 20px 0 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px;
         }
 
         .logo {
@@ -77,79 +68,123 @@
             font-weight: 300;
         }
 
-        /* ===== STATS ===== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin: 20px 0 24px;
-        }
-
-        .stat-item {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 12px;
-            padding: 12px 8px;
-            text-align: center;
+        /* ===== STATS BAR ===== */
+        .stats-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .stat-item .num {
-            font-size: 20px;
-            font-weight: 700;
+        .stats-bar .stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+        }
+
+        .stats-bar .stat .num {
             color: #ffd200;
-            display: block;
-            line-height: 1.2;
-        }
-
-        .stat-item .lbl {
-            font-size: 10px;
-            color: rgba(255, 255, 255, 0.35);
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            margin-top: 3px;
-        }
-
-        /* ===== BUTTON ===== */
-        .btn-download {
-            width: 100%;
-            padding: 16px 20px;
-            font-size: 17px;
             font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* ===== FOLDER GRID ===== */
+        .folder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        /* ===== FOLDER CARD ===== */
+        .folder-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 16px 14px;
+            transition: all 0.3s ease;
+        }
+
+        .folder-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 215, 0, 0.15);
+        }
+
+        .folder-card .folder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .folder-card .folder-name {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        .folder-card .folder-name .num {
+            color: #ffd200;
+            font-weight: 700;
+        }
+
+        .folder-card .folder-size {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+        }
+
+        .folder-card .folder-desc {
+            color: rgba(255, 255, 255, 0.25);
+            font-size: 12px;
+            margin-bottom: 12px;
+            padding-left: 2px;
+        }
+
+        /* ===== DOWNLOAD BUTTON (per folder) ===== */
+        .btn-folder {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 14px;
+            font-weight: 600;
             color: #0a0a0a;
             background: linear-gradient(135deg, #f7971e, #ffd200);
             border: none;
-            border-radius: 14px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 8px;
             touch-action: manipulation;
-            position: relative;
-            overflow: hidden;
-            min-height: 56px;
+            min-height: 44px;
         }
 
-        .btn-download:active:not(:disabled) {
+        .btn-folder:active:not(:disabled) {
             transform: scale(0.96);
         }
 
-        .btn-download:disabled {
+        .btn-folder:disabled {
             opacity: 0.4;
             cursor: not-allowed;
             transform: none !important;
         }
 
-        .btn-download .icon {
-            font-size: 20px;
+        .btn-folder .icon {
+            font-size: 16px;
         }
 
-        .spinner-ring {
+        .btn-folder .spinner-sm {
             display: none;
-            width: 22px;
-            height: 22px;
-            border: 3px solid rgba(10, 10, 10, 0.15);
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(10, 10, 10, 0.15);
             border-top-color: #0a0a0a;
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
@@ -161,35 +196,35 @@
             }
         }
 
-        .btn-download.loading .spinner-ring {
+        .btn-folder.loading .spinner-sm {
             display: inline-block;
         }
-        .btn-download.loading .btn-label {
+        .btn-folder.loading .btn-label {
             display: none;
         }
-        .btn-download.loading .icon {
-            display: none;
-        }
-
-        /* ===== PROGRESS ===== */
-        .progress-area {
-            margin-top: 18px;
+        .btn-folder.loading .icon {
             display: none;
         }
 
-        .progress-area.active {
+        /* ===== PROGRESS (per folder) ===== */
+        .folder-progress {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .folder-progress.active {
             display: block;
         }
 
-        .progress-track {
+        .folder-progress .track {
             width: 100%;
-            height: 5px;
+            height: 4px;
             background: rgba(255, 255, 255, 0.06);
             border-radius: 10px;
             overflow: hidden;
         }
 
-        .progress-fill {
+        .folder-progress .track .fill {
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, #f7971e, #ffd200);
@@ -197,87 +232,21 @@
             transition: width 0.3s ease;
         }
 
-        .progress-info {
+        .folder-progress .info {
             display: flex;
             justify-content: space-between;
-            margin-top: 8px;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 12px;
-            font-weight: 300;
-        }
-
-        .progress-info .speed {
-            color: #4ade80;
-        }
-
-        /* ===== LOG ===== */
-        .log-box {
-            margin-top: 14px;
-            padding: 10px 14px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            max-height: 110px;
-            overflow-y: auto;
-            font-size: 11px;
-            font-family: 'Courier New', monospace;
-            color: rgba(255, 255, 255, 0.35);
-            line-height: 1.8;
-            display: none;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .log-box.active {
-            display: block;
-        }
-
-        .log-box .entry {
-            opacity: 0;
-            animation: fadeIn 0.25s ease forwards;
-        }
-
-        .log-box .entry.done {
-            color: #4ade80;
-        }
-        .log-box .entry.err {
-            color: #f87171;
-        }
-        .log-box .entry.info {
-            color: #60a5fa;
-        }
-        .log-box .entry.warn {
-            color: #fbbf24;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        .log-box::-webkit-scrollbar {
-            width: 3px;
-        }
-        .log-box::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            margin-top: 18px;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.08);
+            margin-top: 4px;
+            color: rgba(255, 255, 255, 0.3);
             font-size: 11px;
         }
 
-        /* ===== MOBILE TOAST ===== */
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(20px);
             padding: 14px 24px;
             border-radius: 14px;
@@ -308,25 +277,45 @@
         }
 
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 400px) {
-            .container {
-                padding: 20px 16px;
+        @media (max-width: 480px) {
+            .folder-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
             }
-            .title-group h1 {
-                font-size: 18px;
+            .folder-card {
+                padding: 12px 10px;
             }
-            .stats-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 6px;
+            .folder-card .folder-name {
+                font-size: 13px;
             }
-            .stat-item .num {
-                font-size: 17px;
+            .btn-folder {
+                font-size: 12px;
+                padding: 8px 10px;
+                min-height: 38px;
             }
-            .btn-download {
-                font-size: 15px;
-                padding: 14px 16px;
-                min-height: 48px;
+            .stats-bar {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 10px 14px;
             }
+            .stats-bar .stat {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .folder-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -341,128 +330,141 @@
         <div class="header">
             <div class="logo">🦍</div>
             <div class="title-group">
-                <h1>BD Punks</h1>
-                <div class="sub">মোবাইল ফ্রেন্ডলি ডাউনলোড</div>
+                <h1>BD Punks Layers</h1>
+                <div class="sub">ফোল্ডার ভিত্তিক ডাউনলোড</div>
             </div>
         </div>
 
         <!-- STATS -->
-        <div class="stats-grid">
-            <div class="stat-item">
-                <span class="num" id="folderCount">—</span>
-                <span class="lbl">ফোল্ডার</span>
-            </div>
-            <div class="stat-item">
-                <span class="num" id="fileCount">—</span>
-                <span class="lbl">ফাইল</span>
-            </div>
-            <div class="stat-item">
-                <span class="num" id="sizeDisplay">—</span>
-                <span class="lbl">সাইজ</span>
-            </div>
+        <div class="stats-bar" id="statsBar">
+            <div class="stat">📁 ফোল্ডার: <span class="num" id="totalFolders">—</span></div>
+            <div class="stat">📄 ফাইল: <span class="num" id="totalFiles">—</span></div>
+            <div class="stat">💾 সাইজ: <span class="num" id="totalSize">—</span></div>
         </div>
 
-        <!-- DOWNLOAD BUTTON -->
-        <button class="btn-download" id="downloadBtn">
-            <span class="icon">📥</span>
-            <span class="btn-label">ডাউনলোড সব লেয়ার</span>
-            <span class="spinner-ring"></span>
-        </button>
-
-        <!-- PROGRESS -->
-        <div class="progress-area" id="progressArea">
-            <div class="progress-track">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="progress-info">
-                <span id="progressText">প্রস্তুত হচ্ছে...</span>
-                <span class="speed" id="speedText">—</span>
-            </div>
-        </div>
-
-        <!-- LOG -->
-        <div class="log-box" id="logBox"></div>
+        <!-- FOLDER GRID -->
+        <div class="folder-grid" id="folderGrid"></div>
 
         <!-- FOOTER -->
-        <div class="footer">⚡ মোবাইল অপটিমাইজড · Firebase Storage</div>
+        <div style="text-align:center;margin-top:30px;color:rgba(255,255,255,0.06);font-size:11px;">
+            ⚡ প্রতিটি ফোল্ডার আলাদাভাবে ডাউনলোড করুন
+        </div>
 
     </div>
 
     <script>
         // ================================================================
-        //  ALL LAYERS DATA
+        //  LAYER DATA
         // ================================================================
 
         const BASE_URL = 'https://firebasestorage.googleapis.com/v0/b/bdpunks.firebasestorage.app/o/';
 
         const LAYERS = {
-            '1_Background': ['Background'],
-            '2_Base': ['Male', 'Female', 'Zombie', 'Ape', 'Alien'],
-            '3_Nose': ['Clown Nose'],
-            '4_Face': ['Spots', 'Mole', 'Rosy Cheeks', 'Frown', 'Smile', 'Buck Teeth', 'Eye Mask', 'Medical Mask',
-                'Clown Eyes Blue', 'Clown Eyes Green'
-            ],
-            '5_Neck': ['Choker', 'Gold Chain', 'Silver Chain'],
-            '6_Mouth': ['Smile', 'Frown', 'Black Lipstick', 'Hot Lipstick', 'Purple Lipstick', 'Pipe', 'Cigarette',
-                'Vape'
-            ],
-            '7_Ear': ['Earring'],
-            '8_Beard': ['Big Beard', 'Chinstrap', 'Goat', 'Handlebars', 'Luxurious Beard', 'Mustache', 'Muttonchops',
-                'Normal Beard', 'Normal Beard Black', 'Shadow Beard', 'Front Beard', 'Front Beard Dark'
-            ],
-            '9_Accessory': ['Bandana', 'Do-rag', 'Hoodie', 'Eye Patch', 'Medical Mask', 'VR', '3D Glasses',
-                'Welding Goggles', 'Cigarette', 'Vape', 'Pipe'
-            ],
-            '10_Head': ['3D Glasses', 'Bandana', 'Beanie', 'Big Shades', 'Blonde Bob', 'Blonde Short', 'Cap',
-                'Cap Forward', 'Clown Hair Green', 'Cowboy Hat', 'Crazy Hair', 'Dark Hair', 'Do-rag', 'Fedora',
-                'Frumpy Hair', 'Half Shaved', 'Headband', 'Hoodie', 'Horned Rim Glasses', 'Knitted Cap',
-                'Messy Hair', 'Mohawk', 'Mohawk Dark', 'Mohawk Thin', 'Orange Side', 'Peak Spike', 'Pigtails',
-                'Pink With Hat', 'Pilot Helmet', 'Police Cap', 'Purple Hair', 'Red Mohawk', 'Shaved Head',
-                'Straight Hair', 'Straight Hair Blonde', 'Straight Hair Dark', 'Stringy Hair', 'Tassle Hat',
-                'Tiara', 'Top Hat', 'Vampire Hair', 'Wild Blonde', 'Wild Hair', 'Wild White Hair'
-            ],
-            '11_Eyes': ['Big Shades', 'Classic Shades', 'Clown Eyes Blue', 'Clown Eyes Green', 'Horned Rim Glasses',
-                'Nerd Glasses', 'Regular Shades', 'Small Shades', 'VR', '3D Glasses', 'Welding Goggles',
-                'Eye Mask', 'Eye Patch', 'Blue Eye Shadow', 'Green Eye Shadow', 'Purple Eye Shadow'
-            ]
+            '1_Background': {
+                files: ['Background'],
+                label: 'ব্যাকগ্রাউন্ড'
+            },
+            '2_Base': {
+                files: ['Male', 'Female', 'Zombie', 'Ape', 'Alien'],
+                label: 'বেস টাইপ'
+            },
+            '3_Nose': {
+                files: ['Clown Nose'],
+                label: 'নাক'
+            },
+            '4_Face': {
+                files: ['Spots', 'Mole', 'Rosy Cheeks', 'Frown', 'Smile', 'Buck Teeth', 'Eye Mask', 'Medical Mask',
+                    'Clown Eyes Blue', 'Clown Eyes Green'
+                ],
+                label: 'মুখের বৈশিষ্ট্য'
+            },
+            '5_Neck': {
+                files: ['Choker', 'Gold Chain', 'Silver Chain'],
+                label: 'গলার অলঙ্কার'
+            },
+            '6_Mouth': {
+                files: ['Smile', 'Frown', 'Black Lipstick', 'Hot Lipstick', 'Purple Lipstick', 'Pipe', 'Cigarette',
+                    'Vape'
+                ],
+                label: 'মুখ/ঠোঁট'
+            },
+            '7_Ear': {
+                files: ['Earring'],
+                label: 'কান'
+            },
+            '8_Beard': {
+                files: ['Big Beard', 'Chinstrap', 'Goat', 'Handlebars', 'Luxurious Beard', 'Mustache', 'Muttonchops',
+                    'Normal Beard', 'Normal Beard Black', 'Shadow Beard', 'Front Beard', 'Front Beard Dark'
+                ],
+                label: 'দাড়ি (পুরুষ)'
+            },
+            '9_Accessory': {
+                files: ['Bandana', 'Do-rag', 'Hoodie', 'Eye Patch', 'Medical Mask', 'VR', '3D Glasses',
+                    'Welding Goggles', 'Cigarette', 'Vape', 'Pipe'
+                ],
+                label: 'অ্যাকসেসরি'
+            },
+            '10_Head': {
+                files: ['3D Glasses', 'Bandana', 'Beanie', 'Big Shades', 'Blonde Bob', 'Blonde Short', 'Cap',
+                    'Cap Forward', 'Clown Hair Green', 'Cowboy Hat', 'Crazy Hair', 'Dark Hair', 'Do-rag', 'Fedora',
+                    'Frumpy Hair', 'Half Shaved', 'Headband', 'Hoodie', 'Horned Rim Glasses', 'Knitted Cap',
+                    'Messy Hair', 'Mohawk', 'Mohawk Dark', 'Mohawk Thin', 'Orange Side', 'Peak Spike', 'Pigtails',
+                    'Pink With Hat', 'Pilot Helmet', 'Police Cap', 'Purple Hair', 'Red Mohawk', 'Shaved Head',
+                    'Straight Hair', 'Straight Hair Blonde', 'Straight Hair Dark', 'Stringy Hair', 'Tassle Hat',
+                    'Tiara', 'Top Hat', 'Vampire Hair', 'Wild Blonde', 'Wild Hair', 'Wild White Hair'
+                ],
+                label: 'মাথা/চুল'
+            },
+            '11_Eyes': {
+                files: ['Big Shades', 'Classic Shades', 'Clown Eyes Blue', 'Clown Eyes Green', 'Horned Rim Glasses',
+                    'Nerd Glasses', 'Regular Shades', 'Small Shades', 'VR', '3D Glasses', 'Welding Goggles',
+                    'Eye Mask', 'Eye Patch', 'Blue Eye Shadow', 'Green Eye Shadow', 'Purple Eye Shadow'
+                ],
+                label: 'চোখ'
+            }
         };
 
-        function buildFileList() {
-            const files = [];
-            for (const [folder, items] of Object.entries(LAYERS)) {
-                for (const item of items) {
-                    const encodedPath = `layers%2F${folder}%2F${item}.png`;
-                    files.push({
+        // ================================================================
+        //  BUILD FILE LIST
+        // ================================================================
+
+        function getFolderFiles(folderName) {
+            const items = LAYERS[folderName].files;
+            return items.map(item => ({
+                name: item,
+                path: `layers/${folderName}/${item}.png`,
+                url: `${BASE_URL}layers%2F${folderName}%2F${item}.png?alt=media`
+            }));
+        }
+
+        function getAllFiles() {
+            const all = [];
+            for (const [folder, data] of Object.entries(LAYERS)) {
+                for (const item of data.files) {
+                    all.push({
                         folder: folder,
                         name: item,
                         path: `layers/${folder}/${item}.png`,
-                        url: `${BASE_URL}${encodedPath}?alt=media`
+                        url: `${BASE_URL}layers%2F${folder}%2F${item}.png?alt=media`
                     });
                 }
             }
-            return files;
+            return all;
         }
-
-        const allFiles = buildFileList();
 
         // ================================================================
         //  DOM REFS
         // ================================================================
-        const btn = document.getElementById('downloadBtn');
-        const progressArea = document.getElementById('progressArea');
-        const progressFill = document.getElementById('progressFill');
-        const progressText = document.getElementById('progressText');
-        const speedText = document.getElementById('speedText');
-        const logBox = document.getElementById('logBox');
-        const folderCountEl = document.getElementById('folderCount');
-        const fileCountEl = document.getElementById('fileCount');
-        const sizeDisplayEl = document.getElementById('sizeDisplay');
+        const grid = document.getElementById('folderGrid');
+        const totalFoldersEl = document.getElementById('totalFolders');
+        const totalFilesEl = document.getElementById('totalFiles');
+        const totalSizeEl = document.getElementById('totalSize');
         const toast = document.getElementById('toast');
 
-        let isRunning = false;
+        let activeDownloads = {};
 
         // ================================================================
-        //  TOAST (মোবাইলের জন্য)
+        //  TOAST
         // ================================================================
         function showToast(msg, duration = 3000) {
             toast.textContent = msg;
@@ -472,71 +474,33 @@
         }
 
         // ================================================================
-        //  LOG HELPER
+        //  DOWNLOAD SINGLE FOLDER
         // ================================================================
-        function addLog(msg, type = 'info') {
-            logBox.classList.add('active');
-            const el = document.createElement('div');
-            el.className = `entry ${type}`;
-            el.textContent = `› ${msg}`;
-            logBox.appendChild(el);
-            logBox.scrollTop = logBox.scrollHeight;
-        }
+        async function downloadFolder(folderName) {
+            if (activeDownloads[folderName]) return;
+            activeDownloads[folderName] = true;
 
-        // ================================================================
-        //  LOAD STATS
-        // ================================================================
-        function loadStats() {
-            const folders = Object.keys(LAYERS).length;
-            const files = allFiles.length;
-            const estimatedSize = (files * 0.15).toFixed(1);
-
-            folderCountEl.textContent = folders;
-            fileCountEl.textContent = files;
-            sizeDisplayEl.textContent = estimatedSize + ' MB';
-
-            return { folders, files };
-        }
-
-        // ================================================================
-        //  DOWNLOAD FUNCTION (মোবাইল ফ্রেন্ডলি)
-        // ================================================================
-        async function downloadAll() {
-            if (isRunning) return;
-            isRunning = true;
+            const btn = document.getElementById(`btn-${folderName}`);
+            const progress = document.getElementById(`progress-${folderName}`);
+            const fill = document.getElementById(`fill-${folderName}`);
+            const info = document.getElementById(`info-${folderName}`);
 
             btn.disabled = true;
             btn.classList.add('loading');
-            progressArea.classList.add('active');
-            logBox.innerHTML = '';
-            logBox.classList.remove('active');
+            progress.classList.add('active');
+            fill.style.width = '0%';
+            info.textContent = '⏳ শুরু হচ্ছে...';
 
-            progressFill.style.width = '0%';
-            progressText.textContent = '⏳ শুরু হচ্ছে...';
-            speedText.textContent = '—';
-
-            const startTime = Date.now();
+            const files = getFolderFiles(folderName);
+            const total = files.length;
+            let completed = 0;
             let downloadedBytes = 0;
-            let completedFiles = 0;
-            const total = allFiles.length;
+            const startTime = Date.now();
 
             try {
-                addLog(`📦 ${total} টি ফাইল ডাউনলোড শুরু`, 'info');
-
-                // মোবাইলে স্টোরেজ পারমিশন চেক
-                if (navigator.storage && navigator.storage.estimate) {
-                    const estimate = await navigator.storage.estimate();
-                    const available = estimate.quota - estimate.usage;
-                    const needed = total * 0.15 * 1024 * 1024; // ~150KB per file
-                    if (available < needed) {
-                        showToast('⚠️ স্টোরেজ স্পেস কম!', 4000);
-                        addLog('⚠️ ফোনে স্পেস কম হতে পারে', 'warn');
-                    }
-                }
-
                 const zip = new JSZip();
-                const concurrency = 6; // মোবাইলের জন্য কম
-                const queue = [...allFiles];
+                const concurrency = 5;
+                const queue = [...files];
                 let active = 0;
 
                 await new Promise((resolve, reject) => {
@@ -558,26 +522,18 @@
                                 .then(blob => {
                                     zip.file(file.path, blob);
                                     downloadedBytes += blob.size;
-                                    completedFiles++;
+                                    completed++;
 
-                                    const elapsed = (Date.now() - startTime) / 1000;
-                                    const speed = elapsed > 0 ? downloadedBytes / elapsed : 0;
-                                    const pct = Math.round((completedFiles / total) * 100);
+                                    const pct = Math.round((completed / total) * 100);
+                                    fill.style.width = pct + '%';
+                                    info.textContent = `⏳ ${completed}/${total} (${pct}%)`;
 
-                                    progressFill.style.width = pct + '%';
-                                    progressText.textContent = `⏳ ${completedFiles}/${total} (${pct}%)`;
-
-                                    const speedStr = speed > 1024 * 1024 ?
-                                        (speed / (1024 * 1024)).toFixed(1) + ' MB/s' :
-                                        (speed / 1024).toFixed(1) + ' KB/s';
-                                    speedText.textContent = speedStr;
-
-                                    if (completedFiles % 10 === 0 || completedFiles === total) {
-                                        addLog(`📥 ${completedFiles}/${total} ফাইল`, 'info');
+                                    if (completed === total) {
+                                        info.textContent = '📦 জিপ তৈরি হচ্ছে...';
                                     }
                                 })
                                 .catch(err => {
-                                    addLog(`⚠️ ${file.name}: ${err.message}`, 'warn');
+                                    info.textContent = `⚠️ ${file.name} failed`;
                                 })
                                 .finally(() => {
                                     active--;
@@ -589,79 +545,97 @@
                     next();
                 });
 
-                progressText.textContent = '📦 জিপ ফাইল তৈরি হচ্ছে...';
-                addLog('📦 জিপ আর্কাইভ তৈরি হচ্ছে...', 'info');
+                info.textContent = '📦 জিপ ফাইল তৈরি হচ্ছে...';
 
                 const zipBlob = await zip.generateAsync({ type: 'blob' });
+                const zipName = `${folderName}.zip`;
 
-                // ===== মোবাইলের জন্য ডাউনলোড =====
-                const zipName = `bdpunks-layers-${new Date().toISOString().slice(0,10)}.zip`;
-
-                // মোবাইল ডাউনলোড (বিকল্প পদ্ধতি)
-                if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                    // মোবাইলে 직접 다운로드
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(zipBlob);
-                    link.download = zipName;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    setTimeout(() => URL.revokeObjectURL(link.href), 10000);
-
-                    showToast('✅ ডাউনলোড শুরু হয়েছে!', 3000);
-                } else {
-                    // ডেস্কটপ
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(zipBlob);
-                    link.download = zipName;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    setTimeout(() => URL.revokeObjectURL(link.href), 10000);
-                }
+                // Download
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(zipBlob);
+                link.download = zipName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(() => URL.revokeObjectURL(link.href), 10000);
 
                 const elapsed = (Date.now() - startTime) / 1000;
                 const sizeMB = (zipBlob.size / (1024 * 1024)).toFixed(1);
 
-                progressFill.style.width = '100%';
-                progressText.textContent = '✅ সম্পূর্ণ!';
-                speedText.textContent = `${elapsed.toFixed(1)}s`;
-
-                addLog(`✅ ${zipName} ডাউনলোড সম্পূর্ণ (${sizeMB} MB, ${elapsed.toFixed(1)}s)`, 'done');
-                showToast('✅ ডাউনলোড সম্পূর্ণ!', 3000);
+                fill.style.width = '100%';
+                info.textContent = `✅ সম্পূর্ণ! (${sizeMB} MB, ${elapsed.toFixed(1)}s)`;
+                showToast(`✅ ${folderName} ডাউনলোড সম্পূর্ণ!`, 2500);
 
             } catch (error) {
-                console.error('Download error:', error);
-                progressText.textContent = '❌ ব্যর্থ!';
-                addLog(`❌ ${error.message}`, 'err');
-                showToast('❌ ডাউনলোড ব্যর্থ!', 3000);
+                info.textContent = `❌ ${error.message}`;
+                showToast(`❌ ${folderName} ডাউনলোড ব্যর্থ`, 3000);
             } finally {
-                isRunning = false;
+                activeDownloads[folderName] = false;
                 btn.disabled = false;
                 btn.classList.remove('loading');
             }
         }
 
         // ================================================================
-        //  EVENT
+        //  RENDER FOLDERS
         // ================================================================
-        btn.addEventListener('click', downloadAll);
+
+        function renderFolders() {
+            const allFiles = getAllFiles();
+            const folderNames = Object.keys(LAYERS);
+            let totalSize = 0;
+
+            // Calculate total size (estimation)
+            for (const f of folderNames) {
+                totalSize += LAYERS[f].files.length * 0.15;
+            }
+
+            totalFoldersEl.textContent = folderNames.length;
+            totalFilesEl.textContent = allFiles.length;
+            totalSizeEl.textContent = totalSize.toFixed(1) + ' MB';
+
+            let html = '';
+            for (const [folder, data] of Object.entries(LAYERS)) {
+                const count = data.files.length;
+                const label = data.label || '';
+
+                html += `
+                    <div class="folder-card">
+                        <div class="folder-header">
+                            <div class="folder-name">📁 ${folder} <span class="num">(${count})</span></div>
+                            <div class="folder-size">${(count * 0.15).toFixed(1)} MB</div>
+                        </div>
+                        <div class="folder-desc">${label}</div>
+
+                        <button class="btn-folder" id="btn-${folder}" onclick="downloadFolder('${folder}')">
+                            <span class="icon">⬇️</span>
+                            <span class="btn-label">ডাউনলোড</span>
+                            <span class="spinner-sm"></span>
+                        </button>
+
+                        <div class="folder-progress" id="progress-${folder}">
+                            <div class="track">
+                                <div class="fill" id="fill-${folder}"></div>
+                            </div>
+                            <div class="info" id="info-${folder}">প্রস্তুত...</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+        }
 
         // ================================================================
         //  INIT
         // ================================================================
-        function init() {
-            const stats = loadStats();
-            addLog(`✅ ${stats.files} টি ফাইল পাওয়া গেছে`, 'done');
-            addLog('📱 মোবাইল ফ্রেন্ডলি মোড', 'info');
 
-            // মোবাইল চেক
-            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                addLog('📱 মোবাইল ডিভাইস ডিটেক্টেড', 'info');
-            }
+        renderFolders();
+
+        // মোবাইল চেক
+        if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            console.log('📱 মোবাইল ডিভাইস');
         }
-
-        init();
     </script>
 
 </body>
