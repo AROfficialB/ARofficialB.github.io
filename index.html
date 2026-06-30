@@ -248,7 +248,7 @@
 
     const isLockerEnabled = true;
     const isCounterEnabled = true;
-    const baseViewsAmount = 1300;
+    const baseViewsAmount = 650; // অর্ধেক করা হয়েছে (পূর্বে ছিল 1300)
 
     const isTV = /SmartTV|Tizen|WebOS|BRAVIA|Android TV|AppleTV|Roku|TV/i.test(navigator.userAgent);
     if (isTV) {
@@ -329,10 +329,10 @@
             }
             
             if (isCounterEnabled) {
-                let n = baseViewsAmount + Math.floor(500 * Math.random());
+                let n = baseViewsAmount + Math.floor(250 * Math.random()); // র‍্যান্ডম সংখ্যাও অর্ধেক করা হয়েছে
                 const t = document.getElementById('liveViewerCount');
                 function o() {
-                    n += Math.floor(300 * Math.random()) - 80;
+                    n += Math.floor(150 * Math.random()) - 40; // ইনক্রিমেন্টও অর্ধেক করা হয়েছে
                     if(t) t.innerText = n >= 1e3 ? (n / 1e3).toFixed(1) + "K" : n.toString();
                     setTimeout(o, 3e3 + 4e3 * Math.random());
                 }
