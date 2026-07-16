@@ -1,311 +1,445 @@
-<!doctype html>
-<html lang="en" class="h-full">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NFT Holder Snapshot</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Sora:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-  <script>
-tailwind.config = {
-  theme: {
-    extend: {
-      fontFamily: {
-        heading: ['Sora', 'sans-serif'],
-        mono: ['Space Mono', 'monospace']
-      }
-    }
-  }
-}
-</script>
-  <style>
-  @keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-  .gradient-bg {
-    background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 30%, #0f1a2e 60%, #0a0a0f 100%);
-    background-size: 300% 300%;
-    animation: gradientShift 12s ease infinite;
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-  .float { animation: float 4s ease-in-out infinite; }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .fade-up { animation: fadeUp 0.6s ease forwards; }
-  .fade-up-d1 { animation-delay: 0.1s; opacity: 0; }
-  .fade-up-d2 { animation-delay: 0.2s; opacity: 0; }
-  .fade-up-d3 { animation-delay: 0.3s; opacity: 0; }
-  .glow-border {
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.08), inset 0 0 20px rgba(139, 92, 246, 0.03);
-  }
-  .input-glow:focus {
-    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.4), 0 0 30px rgba(139, 92, 246, 0.1);
-  }
-  .btn-glow {
-    background: linear-gradient(135deg, #7c3aed, #6d28d9);
-    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
-    transition: all 0.3s ease;
-  }
-  .btn-glow:hover:not(:disabled) {
-    box-shadow: 0 6px 30px rgba(124, 58, 237, 0.6);
-    transform: translateY(-1px);
-  }
-  .btn-glow:disabled { opacity: 0.5; cursor: not-allowed; }
-  .orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.15;
-    pointer-events: none;
-  }
-  .scrollbar-thin::-webkit-scrollbar { width: 6px; }
-  .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 3px; }
-  .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.3); border-radius: 3px; }
-  .toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
-    z-index: 100;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-</style>
-  <style>body { box-sizing: border-box; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
- </head>
- <body class="h-full">
-  <div id="app" class="gradient-bg h-full w-full overflow-auto relative font-heading"><!-- Orbs -->
-   <div class="orb" style="width:400px;height:400px;background:#7c3aed;top:-100px;right:-100px;"></div>
-   <div class="orb" style="width:300px;height:300px;background:#3b82f6;bottom:10%;left:-80px;"></div>
-   <div class="max-w-2xl mx-auto px-4 py-10 sm:py-16 relative z-10"><!-- Header -->
-    <header class="text-center mb-10 fade-up">
-     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-medium mb-5 tracking-wide"><i data-lucide="hexagon" style="width:14px;height:14px;"></i> ON-CHAIN DATA TOOL
-     </div>
-     <h1 id="siteTitle" class="text-3xl sm:text-5xl font-bold text-white mb-3 tracking-tight">NFT Holder Snapshot</h1>
-     <p id="subtitleText" class="text-gray-400 text-sm sm:text-base max-w-md mx-auto">Export any NFT collection's holder addresses as a CSV — powered by public APIs.</p>
-    </header><!-- Main Card -->
-    <div class="glow-border rounded-2xl bg-white/[0.03] backdrop-blur-sm p-5 sm:p-8 fade-up fade-up-d1"><!-- Network Select -->
-     <div class="mb-5"><label for="networkSelect" class="block text-gray-300 text-sm font-medium mb-2">Blockchain Network</label>
-      <div class="relative"><select id="networkSelect" class="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white text-sm appearance-none focus:outline-none input-glow transition"> <option value="eth-mainnet">Ethereum Mainnet</option> <option value="polygon-mainnet">Polygon</option> <option value="opt-mainnet">Optimism</option> <option value="arb-mainnet">Arbitrum</option> <option value="base-mainnet">Base</option> </select> <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" style="width:18px;height:18px;"></i>
-      </div>
-     </div><!-- Contract Address -->
-     <div class="mb-5"><label for="contractInput" class="block text-gray-300 text-sm font-medium mb-2">Contract Address</label> <input id="contractInput" type="text" placeholder="0x..." spellcheck="false" class="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none input-glow transition font-mono">
-     </div><!-- API Key -->
-     <div class="mb-6"><label for="apiKeyInput" class="block text-gray-300 text-sm font-medium mb-2"> Alchemy API Key <a href="https://dashboard.alchemy.com/signup" target="_blank" rel="noopener noreferrer" class="text-violet-400 hover:text-violet-300 ml-1 font-normal">(Get free key →)</a> </label> <input id="apiKeyInput" type="password" placeholder="Your Alchemy API key" class="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none input-glow transition font-mono">
-      <p class="text-gray-600 text-xs mt-1.5">Your key stays in your browser and is never stored.</p>
-     </div><!-- Fetch Button --> <button id="fetchBtn" onclick="fetchHolders()" class="btn-glow w-full rounded-xl px-6 py-3.5 text-white font-semibold text-sm flex items-center justify-center gap-2"> <i data-lucide="download-cloud" style="width:18px;height:18px;"></i> <span id="fetchBtnText">Fetch Holders</span> </button>
-    </div><!-- Progress -->
-    <div id="progressSection" class="hidden mt-6 fade-up fade-up-d2">
-     <div class="glow-border rounded-2xl bg-white/[0.03] p-5">
-      <div class="flex items-center justify-between mb-3"><span class="text-gray-300 text-sm font-medium">Fetching holders…</span> <span id="progressCount" class="text-violet-400 text-sm font-mono">0</span>
-      </div>
-      <div class="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-       <div id="progressBar" class="h-full bg-gradient-to-r from-violet-600 to-blue-500 rounded-full transition-all duration-300" style="width:10%"></div>
-      </div>
-      <p id="progressMsg" class="text-gray-500 text-xs mt-2">Please wait, paginating through all holders…</p>
-     </div>
-    </div><!-- Results -->
-    <div id="resultsSection" class="hidden mt-6 fade-up fade-up-d3">
-     <div class="glow-border rounded-2xl bg-white/[0.03] p-5">
-      <div class="flex items-center justify-between mb-4">
-       <h2 class="text-white font-semibold text-lg flex items-center gap-2"><i data-lucide="users" style="width:20px;height:20px;" class="text-violet-400"></i> <span id="resultTitle">Holders Found</span></h2><button id="downloadBtn" onclick="downloadCSV()" class="flex items-center gap-1.5 bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold px-4 py-2 rounded-lg transition"> <i data-lucide="file-down" style="width:14px;height:14px;"></i> Download CSV </button>
-      </div><!-- Stats -->
-      <div class="grid grid-cols-2 gap-3 mb-4">
-       <div class="bg-white/[0.04] rounded-xl p-3 text-center">
-        <p class="text-gray-500 text-xs mb-1">Unique Holders</p>
-        <p id="statHolders" class="text-white font-bold text-xl font-mono">0</p>
-       </div>
-       <div class="bg-white/[0.04] rounded-xl p-3 text-center">
-        <p class="text-gray-500 text-xs mb-1">Total Supply</p>
-        <p id="statSupply" class="text-white font-bold text-xl font-mono">0</p>
-       </div>
-      </div><!-- Preview -->
-      <div class="bg-black/30 rounded-xl p-3 max-h-48 overflow-auto scrollbar-thin">
-       <table class="w-full text-xs">
-        <thead>
-         <tr class="text-gray-500 border-b border-white/5">
-          <th class="text-left py-2 px-2">#</th>
-          <th class="text-left py-2 px-2">Address</th>
-          <th class="text-right py-2 px-2">Balance</th>
-         </tr>
-        </thead>
-        <tbody id="previewTable" class="text-gray-300 font-mono"></tbody>
-       </table>
-      </div>
-      <p class="text-gray-600 text-xs mt-2 text-center">Showing first 50 holders — download CSV for the full list.</p>
-     </div>
-    </div><!-- Footer -->
-    <footer class="text-center mt-10 text-gray-600 text-xs">
-     Uses <a href="https://docs.alchemy.com/reference/getownersforcollection" target="_blank" rel="noopener noreferrer" class="text-violet-500 hover:text-violet-400">Alchemy API</a> · Your API key never leaves your browser
-    </footer>
-   </div><!-- Toast -->
-   <div id="toast" class="toast px-5 py-3 rounded-xl text-sm font-medium max-w-sm text-center"></div>
-  </div>
-  <script>
-  // State
-  let holdersData = [];
-
-  // Toast
-  function showToast(msg, type = 'error') {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = `toast px-5 py-3 rounded-xl text-sm font-medium max-w-sm text-center show ${type === 'error' ? 'bg-red-600/90 text-white' : 'bg-emerald-600/90 text-white'}`;
-    setTimeout(() => t.classList.remove('show'), 3500);
-  }
-
-  // Fetch holders via Alchemy
-  async function fetchHolders() {
-    const contract = document.getElementById('contractInput').value.trim();
-    const apiKey = document.getElementById('apiKeyInput').value.trim();
-    const network = document.getElementById('networkSelect').value;
-
-    if (!contract || !apiKey) { showToast('Please enter both contract address and API key.'); return; }
-    if (!/^0x[a-fA-F0-9]{40}$/.test(contract)) { showToast('Invalid contract address format.'); return; }
-
-    const btn = document.getElementById('fetchBtn');
-    const btnText = document.getElementById('fetchBtnText');
-    btn.disabled = true;
-    btnText.textContent = 'Fetching…';
-
-    document.getElementById('progressSection').classList.remove('hidden');
-    document.getElementById('resultsSection').classList.add('hidden');
-    holdersData = [];
-
-    const baseUrl = `https://${network}.g.alchemy.com/v2/${apiKey}/getOwnersForCollection`;
-    let pageKey = '';
-    let totalFetched = 0;
-
-    try {
-      do {
-        const url = pageKey ? `${baseUrl}?contractAddress=${contract}&withTokenBalances=true&pageKey=${pageKey}` : `${baseUrl}?contractAddress=${contract}&withTokenBalances=true`;
-        const res = await fetch(url);
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.error?.message || `API error ${res.status}`);
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lottie JSON ডাউনলোডার</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        const data = await res.json();
-
-        if (data.ownerAddresses) {
-          data.ownerAddresses.forEach(o => {
-            const balance = o.tokenBalances ? o.tokenBalances.reduce((s, t) => s + parseInt(t.balance, 10), 0) : 1;
-            holdersData.push({ address: o.ownerAddress, balance });
-          });
-          totalFetched = holdersData.length;
-          document.getElementById('progressCount').textContent = totalFetched.toLocaleString();
-          document.getElementById('progressBar').style.width = pageKey ? '60%' : '30%';
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, #0b1120 0%, #19223b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
+        .card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 48px;
+            padding: 40px 32px;
+            max-width: 680px;
+            width: 100%;
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.6);
+            transition: 0.3s;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #f0f4ff;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        h1 span {
+            background: #2d3b5a;
+            padding: 4px 14px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #b3c9ff;
+        }
+        .sub {
+            color: #9aaed9;
+            font-size: 15px;
+            margin-bottom: 28px;
+            border-left: 3px solid #4a7cf7;
+            padding-left: 16px;
+            line-height: 1.5;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .url-input-wrap {
+            background: #141d31;
+            border-radius: 40px;
+            padding: 4px;
+            border: 1px solid #2b3a5a;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        .url-input-wrap:focus-within {
+            border-color: #5c8aff;
+            box-shadow: 0 0 0 4px rgba(74, 124, 247, 0.25);
+        }
+        #jsonUrl {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 16px 20px;
+            font-size: 15px;
+            color: #e8edff;
+            outline: none;
+            font-family: 'Segoe UI', monospace;
+            letter-spacing: 0.3px;
+        }
+        #jsonUrl::placeholder {
+            color: #5b6f98;
+            font-weight: 400;
+            letter-spacing: 0.2px;
+        }
+        .btn-download {
+            background: #4a7cf7;
+            border: none;
+            border-radius: 40px;
+            padding: 14px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            margin: 4px;
+        }
+        .btn-download:hover {
+            background: #3b67d9;
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(74, 124, 247, 0.35);
+        }
+        .btn-download:active {
+            transform: scale(0.97);
+        }
+        .btn-download:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(0.3);
+        }
+        .example-box {
+            background: #0f172b;
+            border-radius: 24px;
+            padding: 14px 18px;
+            margin: 20px 0 10px;
+            border: 1px solid #26324d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .example-box code {
+            color: #b3ccff;
+            font-size: 14px;
+            word-break: break-all;
+            background: #1a253f;
+            padding: 6px 14px;
+            border-radius: 60px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .example-box button {
+            background: #2a3860;
+            border: none;
+            color: #b3ccff;
+            padding: 8px 22px;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #3b4d7a;
+        }
+        .example-box button:hover {
+            background: #3b4f80;
+            color: white;
+        }
+        .status {
+            margin-top: 24px;
+            padding: 14px 20px;
+            border-radius: 30px;
+            background: #10192e;
+            border-left: 4px solid #4a7cf7;
+            color: #c6d9ff;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 60px;
+            transition: 0.25s;
+            word-break: break-word;
+        }
+        .status.error {
+            border-left-color: #f75c6b;
+            background: #2a1620;
+            color: #ffb3b3;
+        }
+        .status.success {
+            border-left-color: #36d399;
+            background: #112a22;
+            color: #a8f0d0;
+        }
+        .spinner {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            border: 3px solid #2d3f6b;
+            border-radius: 50%;
+            border-top-color: #5c8aff;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .footer {
+            margin-top: 28px;
+            color: #4c5f86;
+            font-size: 13px;
+            text-align: center;
+            border-top: 1px solid #1b2845;
+            padding-top: 20px;
+        }
+        .footer a {
+            color: #6b8cff;
+            text-decoration: none;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+        }
+        @media (max-width: 520px) {
+            .card { padding: 28px 18px; }
+            .btn-download { width: 100%; justify-content: center; }
+            .url-input-wrap { flex-wrap: wrap; background: transparent; padding: 0; border: none; }
+            .url-input-wrap:focus-within { box-shadow: none; }
+            #jsonUrl { background: #141d31; border-radius: 40px; border: 1px solid #2b3a5a; padding: 16px 20px; }
+            .btn-download { margin: 0; border-radius: 40px; }
+            .example-box { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>
+            📥 Lottie ডাউনলোড
+            <span>JSON</span>
+        </h1>
+        <div class="sub">
+            একটি Lottie JSON ফাইলের লিংক দিন — ফাইলটি স্বয়ংক্রিয়ভাবে ডাউনলোড হবে।
+        </div>
 
-        pageKey = data.pageKey || '';
-      } while (pageKey);
+        <div class="input-group">
+            <div class="url-input-wrap">
+                <input type="url" id="jsonUrl" placeholder="https://example.com/file.lottie.json" value="https://nft.fragment.com/gift/scaredcat-12339.lottie.json" />
+                <button class="btn-download" id="downloadBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    ডাউনলোড
+                </button>
+            </div>
+        </div>
 
-      document.getElementById('progressBar').style.width = '100%';
-      document.getElementById('progressMsg').textContent = 'Done!';
+        <!-- উদাহরণ লিংক -->
+        <div class="example-box">
+            <code>🔗 scaredcat-12339.lottie.json</code>
+            <button id="pasteExampleBtn">📋 ব্যবহার করুন</button>
+        </div>
 
-      // Sort by balance desc
-      holdersData.sort((a, b) => b.balance - a.balance);
-      renderResults();
-      showToast(`Found ${holdersData.length.toLocaleString()} unique holders!`, 'success');
+        <!-- স্ট্যাটাস/মেসেজ -->
+        <div class="status" id="statusMessage">
+            <span>⏳</span> লিংক দিন ও ডাউনলোড চাপুন
+        </div>
 
-    } catch (e) {
-      showToast(e.message || 'Failed to fetch holders.');
-      document.getElementById('progressSection').classList.add('hidden');
-    } finally {
-      btn.disabled = false;
-      btnText.textContent = 'Fetch Holders';
-    }
-  }
+        <div class="footer">
+            🔹 ফাইলের নাম URL থেকে নেওয়া হয় &bull; <span id="fileNamePreview">scaredcat-12339.lottie.json</span>
+        </div>
+    </div>
 
-  function renderResults() {
-    document.getElementById('resultsSection').classList.remove('hidden');
-    document.getElementById('statHolders').textContent = holdersData.length.toLocaleString();
-    const totalSupply = holdersData.reduce((s, h) => s + h.balance, 0);
-    document.getElementById('statSupply').textContent = totalSupply.toLocaleString();
-    document.getElementById('resultTitle').textContent = `${holdersData.length.toLocaleString()} Holders Found`;
+    <script>
+        (function() {
+            const urlInput = document.getElementById('jsonUrl');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const statusDiv = document.getElementById('statusMessage');
+            const fileNamePreview = document.getElementById('fileNamePreview');
+            const pasteExampleBtn = document.getElementById('pasteExampleBtn');
 
-    const tbody = document.getElementById('previewTable');
-    tbody.innerHTML = holdersData.slice(0, 50).map((h, i) =>
-      `<tr class="border-b border-white/5 hover:bg-white/[0.02]">
-        <td class="py-1.5 px-2 text-gray-500">${i + 1}</td>
-        <td class="py-1.5 px-2 truncate max-w-[200px]">${h.address}</td>
-        <td class="py-1.5 px-2 text-right text-violet-300">${h.balance}</td>
-      </tr>`
-    ).join('');
-  }
+            // উদাহরণ লিংক বসানোর বাটন
+            pasteExampleBtn.addEventListener('click', function() {
+                urlInput.value = 'https://nft.fragment.com/gift/scaredcat-12339.lottie.json';
+                updateFileNamePreview(urlInput.value);
+                setStatus('📋 উদাহরণ লিংক বসানো হয়েছে। এখন ডাউনলোড চাপুন।', '');
+                downloadBtn.disabled = false;
+            });
 
-  function downloadCSV() {
-    if (!holdersData.length) return;
-    const contract = document.getElementById('contractInput').value.trim();
-    let csv = 'rank,address,balance\n';
-    holdersData.forEach((h, i) => { csv += `${i + 1},${h.address},${h.balance}\n`; });
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `nft_holders_${contract.slice(0, 8)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('CSV downloaded!', 'success');
-  }
+            // URL থেকে ফাইলের নাম বের করা (শেষ স্ল্যাশের পর的部分)
+            function extractFileNameFromUrl(url) {
+                try {
+                    const urlObj = new URL(url);
+                    const path = urlObj.pathname; // e.g. /gift/scaredcat-12339.lottie.json
+                    const segments = path.split('/');
+                    let fileName = segments[segments.length - 1];
+                    if (!fileName) {
+                        // যদি শেষ অংশ ফাঁকা হয়, তাহলে হোস্টনেম ব্যবহার
+                        fileName = urlObj.hostname + '.json';
+                    }
+                    // ডিকোড করা (যেমন %20 → space)
+                    fileName = decodeURIComponent(fileName);
+                    // নিশ্চিত করা যে .json আছে, না থাকলে যোগ করা
+                    if (!fileName.toLowerCase().endsWith('.json')) {
+                        fileName += '.json';
+                    }
+                    return fileName;
+                } catch (e) {
+                    // URL পার্স করতে না পারলে ডিফল্ট
+                    return 'downloaded.lottie.json';
+                }
+            }
 
-  // Element SDK
-  const defaultConfig = {
-    site_title: 'NFT Holder Snapshot',
-    subtitle_text: "Export any NFT collection's holder addresses as a CSV — powered by public APIs.",
-    background_color: '#0a0a0f',
-    surface_color: '#1a0a2e',
-    text_color: '#e5e7eb',
-    primary_action_color: '#7c3aed',
-    secondary_action_color: '#8b5cf6',
-    font_family: 'Sora',
-    font_size: 16
-  };
+            // প্রিভিউ আপডেট
+            function updateFileNamePreview(url) {
+                const name = extractFileNameFromUrl(url);
+                fileNamePreview.textContent = name;
+                return name;
+            }
 
-  function applyConfig(config) {
-    const c = { ...defaultConfig, ...config };
-    document.getElementById('siteTitle').textContent = c.site_title;
-    document.getElementById('subtitleText').textContent = c.subtitle_text;
+            // স্ট্যাটাস মেসেজ সেট করা
+            function setStatus(message, type = '') {
+                statusDiv.className = 'status';
+                if (type === 'error') {
+                    statusDiv.classList.add('error');
+                } else if (type === 'success') {
+                    statusDiv.classList.add('success');
+                }
+                // স্পিনার বা আইকন সহ মেসেজ দেখানো
+                if (type === 'loading') {
+                    statusDiv.innerHTML = `<span class="spinner"></span> ${message}`;
+                } else {
+                    // এমোজি প্রতিস্থাপন (বেসিক)
+                    let icon = 'ℹ️';
+                    if (type === 'success') icon = '✅';
+                    else if (type === 'error') icon = '❌';
+                    else icon = '⏳';
+                    statusDiv.innerHTML = `<span>${icon}</span> ${message}`;
+                }
+            }
 
-    const font = c.font_family || defaultConfig.font_family;
-    document.getElementById('siteTitle').style.fontFamily = `${font}, sans-serif`;
-    document.getElementById('subtitleText').style.fontFamily = `${font}, sans-serif`;
+            // ডাউনলোড ফাংশন
+            async function downloadLottieJson() {
+                const url = urlInput.value.trim();
+                if (!url) {
+                    setStatus('দয়া করে একটি বৈধ URL দিন।', 'error');
+                    return;
+                }
 
-    const base = c.font_size || defaultConfig.font_size;
-    document.getElementById('subtitleText').style.fontSize = `${base}px`;
-  }
+                // URL ভ্যালিডেশন (সহজ)
+                try {
+                    new URL(url);
+                } catch (_) {
+                    setStatus('URL টি সঠিক নয়। "https://" দিয়ে শুরু করুন।', 'error');
+                    return;
+                }
 
-  window.elementSdk.init({
-    defaultConfig,
-    onConfigChange: async (config) => applyConfig(config),
-    mapToCapabilities: (config) => {
-      const c = { ...defaultConfig, ...config };
-      const mk = (key) => ({
-        get: () => c[key] || defaultConfig[key],
-        set: (v) => { c[key] = v; window.elementSdk.setConfig({ [key]: v }); }
-      });
-      return {
-        recolorables: [mk('background_color'), mk('surface_color'), mk('text_color'), mk('primary_action_color'), mk('secondary_action_color')],
-        borderables: [],
-        fontEditable: mk('font_family'),
-        fontSizeable: mk('font_size')
-      };
-    },
-    mapToEditPanelValues: (config) => {
-      const c = { ...defaultConfig, ...config };
-      return new Map([
-        ['site_title', c.site_title],
-        ['subtitle_text', c.subtitle_text]
-      ]);
-    }
-  });
+                // ডাউনলোড বাটন ডিজেবল
+                downloadBtn.disabled = true;
+                setStatus('ডাউনলোড শুরু হচ্ছে...', 'loading');
 
-  lucide.createIcons();
-</script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fc5233172c90ed7',t:'MTc3ODg3OTUxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+                try {
+                    // ১. ফেচ করা
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`সার্ভার থেকে ত্রুটি: ${response.status} ${response.statusText}`);
+                    }
+
+                    // ২. JSON কন্টেন্ট পড়া
+                    const jsonData = await response.json();
+
+                    // ৩. ফাইলের নাম তৈরি
+                    let fileName = extractFileNameFromUrl(url);
+                    // যদি নামটা হয় "downloaded.lottie.json" তাহলে ইউআরএল থেকে ভালো নাম বের করার চেষ্টা
+                    if (fileName === 'downloaded.lottie.json') {
+                        const pathParts = url.split('/');
+                        const lastPart = pathParts[pathParts.length - 1].split('?')[0];
+                        if (lastPart && lastPart.includes('.')) {
+                            fileName = decodeURIComponent(lastPart);
+                            if (!fileName.toLowerCase().endsWith('.json')) fileName += '.json';
+                        } else {
+                            fileName = 'lottie_animation.json';
+                        }
+                    }
+                    updateFileNamePreview(url); // প্রিভিউ আপডেট
+
+                    // ৪. JSON স্ট্রিং তৈরি (pretty print)
+                    const jsonString = JSON.stringify(jsonData, null, 2);
+
+                    // ৫. BLOB তৈরি
+                    const blob = new Blob([jsonString], { type: 'application/json' });
+                    const objectUrl = URL.createObjectURL(blob);
+
+                    // ৬. ডাউনলোড ট্রিগার
+                    const link = document.createElement('a');
+                    link.href = objectUrl;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    // ৭. ক্লিনআপ
+                    setTimeout(() => URL.revokeObjectURL(objectUrl), 5000);
+
+                    setStatus(`✅ "${fileName}" ডাউনলোড সম্পূর্ণ! (${(blob.size / 1024).toFixed(1)} KB)`, 'success');
+                } catch (error) {
+                    console.error('ডাউনলোড ত্রুটি:', error);
+                    setStatus(`❌ ডাউনলোড ব্যর্থ: ${error.message}`, 'error');
+                } finally {
+                    downloadBtn.disabled = false;
+                }
+            }
+
+            // URL ইনপুটে পরিবর্তন হলে প্রিভিউ আপডেট
+            urlInput.addEventListener('input', function() {
+                const val = this.value.trim();
+                if (val) {
+                    updateFileNamePreview(val);
+                } else {
+                    fileNamePreview.textContent = 'ফাইল নাম এখানে দেখাবে';
+                }
+                // আগের স্ট্যাটাস রিসেট (যদি error/success থাকে)
+                if (statusDiv.classList.contains('error') || statusDiv.classList.contains('success')) {
+                    statusDiv.className = 'status';
+                    statusDiv.innerHTML = `⏳ লিংক দিন ও ডাউনলোড চাপুন`;
+                }
+            });
+
+            // ডাউনলোড বাটন ক্লিক
+            downloadBtn.addEventListener('click', downloadLottieJson);
+
+            // এন্টার কী সাপোর্ট
+            urlInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    downloadBtn.click();
+                }
+            });
+
+            // পেজ লোড হলে ডিফল্ট উদাহরণ প্রিভিউ আপডেট
+            window.addEventListener('DOMContentLoaded', function() {
+                const defaultUrl = urlInput.value;
+                if (defaultUrl) {
+                    updateFileNamePreview(defaultUrl);
+                    setStatus('⏳ ডিফল্ট উদাহরণ লিংক প্রস্তুত। ডাউনলোড চাপুন।', '');
+                }
+                // বাটন সক্রিয়
+                downloadBtn.disabled = false;
+            });
+        })();
+    </script>
+</body>
 </html>
