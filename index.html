@@ -1,444 +1,580 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lottie JSON ডাউনলোডার</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plush Pepe Downloader</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
-            padding: 0;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(145deg, #0b1120 0%, #19223b 100%);
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f2f6fc;
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 20px;
+            align-items: center;
+            padding: 1.5rem;
+            margin: 0;
         }
         .card {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 48px;
-            padding: 40px 32px;
-            max-width: 680px;
+            max-width: 920px;
             width: 100%;
-            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.6);
-            transition: 0.3s;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 48px -12px rgba(0,20,30,0.25);
+            padding: 2rem 2.2rem 2.5rem;
+            transition: 0.2s;
         }
         h1 {
-            font-size: 28px;
-            font-weight: 600;
-            color: #f0f4ff;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-        h1 span {
-            background: #2d3b5a;
-            padding: 4px 14px;
-            border-radius: 100px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #b3c9ff;
+            gap: 0.75rem;
+            color: #0b1a2a;
+            margin-bottom: 0.2rem;
         }
         .sub {
-            color: #9aaed9;
-            font-size: 15px;
-            margin-bottom: 28px;
-            border-left: 3px solid #4a7cf7;
-            padding-left: 16px;
-            line-height: 1.5;
+            color: #2a4b6e;
+            margin-bottom: 1.6rem;
+            font-size: 1rem;
+            border-left: 5px solid #7ca9d9;
+            padding-left: 1.2rem;
+            background: #eef4fb;
+            border-radius: 0 14px 14px 0;
+            line-height: 1.6;
         }
-        .input-group {
+        .range-box {
+            background: #e9f0f8;
+            padding: 1.2rem 1.6rem;
+            border-radius: 1.5rem;
             display: flex;
-            flex-direction: column;
-            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem 2.2rem;
+            margin: 1rem 0 1.6rem;
         }
-        .url-input-wrap {
-            background: #141d31;
-            border-radius: 40px;
-            padding: 4px;
-            border: 1px solid #2b3a5a;
-            transition: 0.3s;
+        .range-item {
             display: flex;
             align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
         }
-        .url-input-wrap:focus-within {
-            border-color: #5c8aff;
-            box-shadow: 0 0 0 4px rgba(74, 124, 247, 0.25);
-        }
-        #jsonUrl {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 16px 20px;
-            font-size: 15px;
-            color: #e8edff;
-            outline: none;
-            font-family: 'Segoe UI', monospace;
-            letter-spacing: 0.3px;
-        }
-        #jsonUrl::placeholder {
-            color: #5b6f98;
-            font-weight: 400;
-            letter-spacing: 0.2px;
-        }
-        .btn-download {
-            background: #4a7cf7;
-            border: none;
-            border-radius: 40px;
-            padding: 14px 30px;
-            font-size: 16px;
+        .range-item label {
             font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: 0.25s;
+            color: #1a3857;
+        }
+        .range-item input {
+            width: 80px;
+            padding: 0.45rem 0.2rem 0.45rem 0.8rem;
+            border: 1px solid #bccfe0;
+            border-radius: 40px;
+            font-size: 1rem;
+            background: white;
+            font-weight: 500;
+        }
+        .range-item input:focus {
+            outline: 2px solid #2b6a9e;
+            border-color: transparent;
+        }
+        .info-badge {
+            background: #d2e2f5;
+            padding: 0.15rem 1.3rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #004080;
+        }
+        .split-download-area {
             display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.6rem 0 1.2rem;
+        }
+        .btn {
+            background: #1a3e60;
+            border: none;
+            padding: 0.75rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-            margin: 4px;
+            gap: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0,30,60,0.15);
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #235b86;
+            flex: 1 1 auto;
+            justify-content: center;
         }
-        .btn-download:hover {
-            background: #3b67d9;
-            transform: scale(1.02);
-            box-shadow: 0 8px 24px rgba(74, 124, 247, 0.35);
+        .btn:hover {
+            background: #0f2d48;
+            transform: scale(1.01);
+            box-shadow: 0 8px 16px rgba(0,20,40,0.25);
         }
-        .btn-download:active {
-            transform: scale(0.97);
-        }
-        .btn-download:disabled {
+        .btn:disabled {
             opacity: 0.5;
             pointer-events: none;
             filter: grayscale(0.3);
         }
-        .example-box {
-            background: #0f172b;
-            border-radius: 24px;
-            padding: 14px 18px;
-            margin: 20px 0 10px;
-            border: 1px solid #26324d;
+        .btn-green {
+            background: #1f6d4a;
+            border-color: #1f7a4f;
+        }
+        .btn-green:hover {
+            background: #145a3a;
+        }
+        .btn-blue {
+            background: #1f5a8e;
+            border-color: #1f6a9e;
+        }
+        .btn-blue:hover {
+            background: #13477a;
+        }
+        .btn-outline {
+            background: transparent;
+            color: #1a3e60;
+            border: 1.5px solid #1a3e60;
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            background: #e6eff8;
+        }
+        .progress-area {
+            margin: 1.5rem 0 1rem;
+        }
+        .progress-bar-bg {
+            background: #dce5f0;
+            height: 10px;
+            border-radius: 40px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #2b7ab0, #53a0d0);
+            border-radius: 40px;
+            transition: width 0.2s ease;
+        }
+        .status-text {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            font-size: 0.9rem;
+            color: #1f4465;
+            margin-top: 0.4rem;
+        }
+        .log-area {
+            background: #f2f6fc;
+            border-radius: 1.2rem;
+            padding: 0.6rem 1.2rem;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            border: 1px solid #dce6f0;
+            margin: 1.2rem 0 0.5rem;
+            color: #0a1f33;
+            font-family: 'SF Mono', 'Cascadia Code', monospace;
+            line-height: 1.6;
+        }
+        .log-entry {
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+            padding: 0.1rem 0;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        .footer-meta {
+            display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            border-top: 1px solid #d9e3ed;
+            padding-top: 1.2rem;
+            font-size: 0.9rem;
+            color: #3c5a78;
         }
-        .example-box code {
-            color: #b3ccff;
-            font-size: 14px;
-            word-break: break-all;
-            background: #1a253f;
-            padding: 6px 14px;
-            border-radius: 60px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .example-box button {
-            background: #2a3860;
-            border: none;
-            color: #b3ccff;
-            padding: 8px 22px;
-            border-radius: 60px;
+        .badge-count {
+            background: #d2e2f5;
+            padding: 0.1rem 1.2rem;
+            border-radius: 40px;
             font-weight: 500;
-            font-size: 14px;
+        }
+        @media (max-width: 650px) {
+            .card { padding: 1.2rem; }
+            .range-box { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+            .split-download-area { flex-direction: column; }
+            .btn { justify-content: center; }
+        }
+        a { color: #1f5a8e; }
+        .clear-log {
+            background: none;
+            border: none;
+            color: #4f6f8f;
             cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid #3b4d7a;
+            font-size: 0.75rem;
+            text-decoration: underline dotted;
         }
-        .example-box button:hover {
-            background: #3b4f80;
-            color: white;
-        }
-        .status {
-            margin-top: 24px;
-            padding: 14px 20px;
-            border-radius: 30px;
-            background: #10192e;
-            border-left: 4px solid #4a7cf7;
-            color: #c6d9ff;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-height: 60px;
-            transition: 0.25s;
-            word-break: break-word;
-        }
-        .status.error {
-            border-left-color: #f75c6b;
-            background: #2a1620;
-            color: #ffb3b3;
-        }
-        .status.success {
-            border-left-color: #36d399;
-            background: #112a22;
-            color: #a8f0d0;
-        }
-        .spinner {
+        .file-type-badge {
             display: inline-block;
-            width: 22px;
-            height: 22px;
-            border: 3px solid #2d3f6b;
-            border-radius: 50%;
-            border-top-color: #5c8aff;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .footer {
-            margin-top: 28px;
-            color: #4c5f86;
-            font-size: 13px;
-            text-align: center;
-            border-top: 1px solid #1b2845;
-            padding-top: 20px;
-        }
-        .footer a {
-            color: #6b8cff;
-            text-decoration: none;
-        }
-        .flex-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 12px;
-        }
-        @media (max-width: 520px) {
-            .card { padding: 28px 18px; }
-            .btn-download { width: 100%; justify-content: center; }
-            .url-input-wrap { flex-wrap: wrap; background: transparent; padding: 0; border: none; }
-            .url-input-wrap:focus-within { box-shadow: none; }
-            #jsonUrl { background: #141d31; border-radius: 40px; border: 1px solid #2b3a5a; padding: 16px 20px; }
-            .btn-download { margin: 0; border-radius: 40px; }
-            .example-box { flex-direction: column; align-items: stretch; }
+            background: #1f4b70;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.05rem 0.6rem;
+            border-radius: 40px;
+            margin-right: 0.4rem;
+            letter-spacing: 0.3px;
         }
     </style>
 </head>
 <body>
-    <div class="card">
+    <div class="card" role="main">
         <h1>
-            📥 Lottie ডাউনলোড
-            <span>JSON</span>
+            <span>📦 Plush Pepe</span>
+            <span style="font-size: 1.1rem; background: #d4e2f5; padding: 0.1rem 1rem; border-radius: 40px;">split</span>
         </h1>
         <div class="sub">
-            একটি Lottie JSON ফাইলের লিংক দিন — ফাইলটি স্বয়ংক্রিয়ভাবে ডাউনলোড হবে।
+            ⚡ Download <strong>Lottie JSON</strong> and <strong>WebP</strong> images in <strong>separate ZIP files</strong>.<br>
+            Files are numbered: <code style="background:#dde8f5; padding:0 0.4rem;">1.lottie.json</code> … <code style="background:#dde8f5; padding:0 0.4rem;">2825.lottie.json</code> &amp; <code style="background:#dde8f5; padding:0 0.4rem;">1.webp</code> … <code style="background:#dde8f5; padding:0 0.4rem;">2825.webp</code>
         </div>
 
-        <div class="input-group">
-            <div class="url-input-wrap">
-                <input type="url" id="jsonUrl" placeholder="https://example.com/file.lottie.json" value="https://nft.fragment.com/gift/scaredcat-12339.lottie.json" />
-                <button class="btn-download" id="downloadBtn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    ডাউনলোড
-                </button>
+        <div class="range-box">
+            <div class="range-item">
+                <label for="startId">Start</label>
+                <input type="number" id="startId" min="1" max="2825" value="1">
+            </div>
+            <div class="range-item">
+                <label for="endId">End</label>
+                <input type="number" id="endId" min="1" max="2825" value="2825">
+            </div>
+            <div class="info-badge">
+                <span id="totalCount">2825</span> items
             </div>
         </div>
 
-        <!-- উদাহরণ লিংক -->
-        <div class="example-box">
-            <code>🔗 scaredcat-12339.lottie.json</code>
-            <button id="pasteExampleBtn">📋 ব্যবহার করুন</button>
+        <div class="split-download-area">
+            <button class="btn btn-blue" id="downloadLottieBtn">
+                <span>🎬</span> Download Lottie (JSON)
+            </button>
+            <button class="btn btn-green" id="downloadImageBtn">
+                <span>🖼️</span> Download Images (WebP)
+            </button>
+            <button class="btn btn-outline" id="resetBtn" style="flex:0.5;">
+                ↺ Reset
+            </button>
         </div>
 
-        <!-- স্ট্যাটাস/মেসেজ -->
-        <div class="status" id="statusMessage">
-            <span>⏳</span> লিংক দিন ও ডাউনলোড চাপুন
+        <div class="progress-area">
+            <div class="progress-bar-bg">
+                <div class="progress-fill" id="progressFill" style="width:0%"></div>
+            </div>
+            <div class="status-text">
+                <span id="progressLabel">Ready</span>
+                <span id="progressPercent">0%</span>
+            </div>
         </div>
 
-        <div class="footer">
-            🔹 ফাইলের নাম URL থেকে নেওয়া হয় &bull; <span id="fileNamePreview">scaredcat-12339.lottie.json</span>
+        <div class="log-area" id="logContainer">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="font-weight:500;">📋 Activity log</span>
+                <button class="clear-log" id="clearLogBtn">clear</button>
+            </div>
+            <div id="logEntries">
+                <div class="log-entry">⏳ waiting for action...</div>
+            </div>
+        </div>
+
+        <div class="footer-meta">
+            <span>🔗 source: <a href="https://nft.fragment.com/gift/" target="_blank">fragment.com/gift</a></span>
+            <span class="badge-count" id="fileCountBadge">0 files</span>
         </div>
     </div>
-
+    <!-- JSZip library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
         (function() {
-            const urlInput = document.getElementById('jsonUrl');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const statusDiv = document.getElementById('statusMessage');
-            const fileNamePreview = document.getElementById('fileNamePreview');
-            const pasteExampleBtn = document.getElementById('pasteExampleBtn');
+            "use strict";
 
-            // উদাহরণ লিংক বসানোর বাটন
-            pasteExampleBtn.addEventListener('click', function() {
-                urlInput.value = 'https://nft.fragment.com/gift/scaredcat-12339.lottie.json';
-                updateFileNamePreview(urlInput.value);
-                setStatus('📋 উদাহরণ লিংক বসানো হয়েছে। এখন ডাউনলোড চাপুন।', '');
-                downloadBtn.disabled = false;
-            });
+            // DOM refs
+            const startInput = document.getElementById('startId');
+            const endInput = document.getElementById('endId');
+            const totalSpan = document.getElementById('totalCount');
+            const downloadLottieBtn = document.getElementById('downloadLottieBtn');
+            const downloadImageBtn = document.getElementById('downloadImageBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const progressFill = document.getElementById('progressFill');
+            const progressLabel = document.getElementById('progressLabel');
+            const progressPercent = document.getElementById('progressPercent');
+            const logEntries = document.getElementById('logEntries');
+            const clearLogBtn = document.getElementById('clearLogBtn');
+            const fileCountBadge = document.getElementById('fileCountBadge');
 
-            // URL থেকে ফাইলের নাম বের করা (শেষ স্ল্যাশের পর的部分)
-            function extractFileNameFromUrl(url) {
-                try {
-                    const urlObj = new URL(url);
-                    const path = urlObj.pathname; // e.g. /gift/scaredcat-12339.lottie.json
-                    const segments = path.split('/');
-                    let fileName = segments[segments.length - 1];
-                    if (!fileName) {
-                        // যদি শেষ অংশ ফাঁকা হয়, তাহলে হোস্টনেম ব্যবহার
-                        fileName = urlObj.hostname + '.json';
-                    }
-                    // ডিকোড করা (যেমন %20 → space)
-                    fileName = decodeURIComponent(fileName);
-                    // নিশ্চিত করা যে .json আছে, না থাকলে যোগ করা
-                    if (!fileName.toLowerCase().endsWith('.json')) {
-                        fileName += '.json';
-                    }
-                    return fileName;
-                } catch (e) {
-                    // URL পার্স করতে না পারলে ডিফল্ট
-                    return 'downloaded.lottie.json';
-                }
+            // state
+            let isRunning = false;
+            let abortFlag = false;
+            let totalFiles = 0;
+            let processed = 0;
+            let currentMode = ''; // 'lottie' or 'image'
+
+            function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+
+            function getRange() {
+                let start = parseInt(startInput.value, 10) || 1;
+                let end = parseInt(endInput.value, 10) || 2825;
+                start = clamp(start, 1, 2825);
+                end = clamp(end, 1, 2825);
+                if (start > end) { [start, end] = [end, start]; }
+                return { start, end, count: end - start + 1 };
             }
 
-            // প্রিভিউ আপডেট
-            function updateFileNamePreview(url) {
-                const name = extractFileNameFromUrl(url);
-                fileNamePreview.textContent = name;
-                return name;
+            function updateTotalCount() {
+                const { count } = getRange();
+                totalSpan.textContent = count;
+                return count;
             }
 
-            // স্ট্যাটাস মেসেজ সেট করা
-            function setStatus(message, type = '') {
-                statusDiv.className = 'status';
-                if (type === 'error') {
-                    statusDiv.classList.add('error');
-                } else if (type === 'success') {
-                    statusDiv.classList.add('success');
+            // logging
+            function addLog(message, type = 'info') {
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
+                entry.textContent = `${prefix} ${message}`;
+                logEntries.appendChild(entry);
+                while (logEntries.children.length > 80) {
+                    logEntries.removeChild(logEntries.firstChild);
                 }
-                // স্পিনার বা আইকন সহ মেসেজ দেখানো
-                if (type === 'loading') {
-                    statusDiv.innerHTML = `<span class="spinner"></span> ${message}`;
+                logEntries.scrollTop = logEntries.scrollHeight;
+            }
+
+            function clearLog() {
+                logEntries.innerHTML = '';
+                addLog('log cleared', 'info');
+            }
+            clearLogBtn.addEventListener('click', clearLog);
+
+            // progress
+            function updateProgress(current, total) {
+                const pct = total === 0 ? 0 : Math.round((current / total) * 100);
+                progressFill.style.width = pct + '%';
+                progressPercent.textContent = pct + '%';
+                if (current === total && total > 0) {
+                    progressLabel.textContent = '✅ Complete!';
+                } else if (isRunning) {
+                    progressLabel.textContent = `⬇️ ${current}/${total}`;
                 } else {
-                    // এমোজি প্রতিস্থাপন (বেসিক)
-                    let icon = 'ℹ️';
-                    if (type === 'success') icon = '✅';
-                    else if (type === 'error') icon = '❌';
-                    else icon = '⏳';
-                    statusDiv.innerHTML = `<span>${icon}</span> ${message}`;
+                    progressLabel.textContent = 'Ready';
                 }
             }
 
-            // ডাউনলোড ফাংশন
-            async function downloadLottieJson() {
-                const url = urlInput.value.trim();
-                if (!url) {
-                    setStatus('দয়া করে একটি বৈধ URL দিন।', 'error');
+            function resetUI() {
+                isRunning = false;
+                abortFlag = false;
+                downloadLottieBtn.disabled = false;
+                downloadImageBtn.disabled = false;
+                downloadLottieBtn.innerHTML = '<span>🎬</span> Download Lottie (JSON)';
+                downloadImageBtn.innerHTML = '<span>🖼️</span> Download Images (WebP)';
+                processed = 0;
+                totalFiles = 0;
+                currentMode = '';
+                updateProgress(0, 0);
+                fileCountBadge.textContent = '0 files';
+                startInput.disabled = false;
+                endInput.disabled = false;
+            }
+
+            // fetch helper with timeout
+            function fetchWithTimeout(url, timeout = 18000) {
+                return new Promise((resolve, reject) => {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => {
+                        controller.abort();
+                        reject(new Error('Timeout'));
+                    }, timeout);
+                    fetch(url, { signal: controller.signal })
+                        .then(response => {
+                            clearTimeout(timer);
+                            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                            return response;
+                        })
+                        .then(resolve)
+                        .catch(err => {
+                            clearTimeout(timer);
+                            reject(err);
+                        });
+                });
+            }
+
+            // main download function
+            async function startDownload(mode) {
+                if (isRunning) {
+                    addLog('⏳ A download is already in progress', 'error');
                     return;
                 }
 
-                // URL ভ্যালিডেশন (সহজ)
-                try {
-                    new URL(url);
-                } catch (_) {
-                    setStatus('URL টি সঠিক নয়। "https://" দিয়ে শুরু করুন।', 'error');
+                const { start, end, count } = getRange();
+                if (count === 0) {
+                    addLog('⚠️ No items in range', 'error');
                     return;
                 }
 
-                // ডাউনলোড বাটন ডিজেবল
-                downloadBtn.disabled = true;
-                setStatus('ডাউনলোড শুরু হচ্ছে...', 'loading');
+                const fileExt = mode === 'lottie' ? 'lottie.json' : 'webp';
+                const zipName = mode === 'lottie' 
+                    ? `plushpepe_lottie_${start}-${end}.zip` 
+                    : `plushpepe_images_${start}-${end}.zip`;
+                const label = mode === 'lottie' ? 'Lottie JSON' : 'WebP images';
 
-                try {
-                    // ১. ফেচ করা
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        headers: { 'Accept': 'application/json' }
-                    });
+                // lock
+                isRunning = true;
+                abortFlag = false;
+                currentMode = mode;
+                totalFiles = count;
+                processed = 0;
+                downloadLottieBtn.disabled = true;
+                downloadImageBtn.disabled = true;
+                startInput.disabled = true;
+                endInput.disabled = true;
 
-                    if (!response.ok) {
-                        throw new Error(`সার্ভার থেকে ত্রুটি: ${response.status} ${response.statusText}`);
+                if (mode === 'lottie') {
+                    downloadLottieBtn.innerHTML = '<span>⏳</span> Downloading Lottie...';
+                } else {
+                    downloadImageBtn.innerHTML = '<span>⏳</span> Downloading Images...';
+                }
+
+                updateProgress(0, totalFiles);
+                fileCountBadge.textContent = '0 files';
+                addLog(`🚀 Starting ${label} download (${count} items)`);
+
+                const zip = new JSZip();
+                let successCount = 0;
+                let failCount = 0;
+
+                for (let id = start; id <= end; id++) {
+                    if (abortFlag) {
+                        addLog('⛔ Aborted by user', 'error');
+                        break;
                     }
 
-                    // ২. JSON কন্টেন্ট পড়া
-                    const jsonData = await response.json();
+                    let url;
+                    if (mode === 'lottie') {
+                        url = `https://nft.fragment.com/gift/plushpepe-${id}.lottie.json`;
+                    } else {
+                        url = `https://nft.fragment.com/gift/plushpepe-${id}.webp`;
+                    }
 
-                    // ৩. ফাইলের নাম তৈরি
-                    let fileName = extractFileNameFromUrl(url);
-                    // যদি নামটা হয় "downloaded.lottie.json" তাহলে ইউআরএল থেকে ভালো নাম বের করার চেষ্টা
-                    if (fileName === 'downloaded.lottie.json') {
-                        const pathParts = url.split('/');
-                        const lastPart = pathParts[pathParts.length - 1].split('?')[0];
-                        if (lastPart && lastPart.includes('.')) {
-                            fileName = decodeURIComponent(lastPart);
-                            if (!fileName.toLowerCase().endsWith('.json')) fileName += '.json';
+                    const fileName = mode === 'lottie' 
+                        ? `${id}.lottie.json` 
+                        : `${id}.webp`;
+
+                    try {
+                        const resp = await fetchWithTimeout(url);
+                        if (mode === 'lottie') {
+                            const text = await resp.text();
+                            // validate JSON
+                            try { JSON.parse(text); } catch (_) { throw new Error('Invalid JSON'); }
+                            zip.file(fileName, text);
+                            addLog(`📄 ${fileName} (${(text.length/1024).toFixed(1)} KB)`, 'success');
                         } else {
-                            fileName = 'lottie_animation.json';
+                            const blob = await resp.blob();
+                            zip.file(fileName, blob);
+                            addLog(`🖼️ ${fileName} (${(blob.size/1024).toFixed(1)} KB)`, 'success');
+                        }
+                        successCount++;
+                    } catch (err) {
+                        failCount++;
+                        addLog(`❌ ${url} — ${err.message || 'failed'}`, 'error');
+                    }
+
+                    processed++;
+                    updateProgress(processed, totalFiles);
+                    fileCountBadge.textContent = `${successCount} files`;
+
+                    // small delay
+                    await new Promise(r => setTimeout(r, 80));
+                }
+
+                // generate and download ZIP
+                if (!abortFlag) {
+                    if (successCount === 0) {
+                        addLog(`⚠️ No ${label} files downloaded — ZIP empty`, 'error');
+                    } else {
+                        addLog(`📦 Generating ${label} ZIP (${successCount} files) ...`, 'info');
+                        try {
+                            const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+                            const link = document.createElement('a');
+                            link.href = URL.createObjectURL(zipBlob);
+                            link.download = zipName;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            setTimeout(() => URL.revokeObjectURL(link.href), 5000);
+                            addLog(`🎉 ${label} ZIP downloaded: ${(zipBlob.size/1024/1024).toFixed(2)} MB`, 'success');
+                        } catch (zipErr) {
+                            addLog(`❌ ZIP generation failed: ${zipErr.message}`, 'error');
                         }
                     }
-                    updateFileNamePreview(url); // প্রিভিউ আপডেট
+                }
 
-                    // ৪. JSON স্ট্রিং তৈরি (pretty print)
-                    const jsonString = JSON.stringify(jsonData, null, 2);
+                const finalMsg = abortFlag ? '⛔ Aborted' : `✅ Done. Success: ${successCount}, Failed: ${failCount}`;
+                progressLabel.textContent = finalMsg;
+                if (!abortFlag && successCount > 0) {
+                    progressPercent.textContent = '100%';
+                    progressFill.style.width = '100%';
+                }
+                fileCountBadge.textContent = `${successCount} files`;
+                addLog(`🏁 Finished ${label} — ${successCount} ok, ${failCount} failed`, 'info');
 
-                    // ৫. BLOB তৈরি
-                    const blob = new Blob([jsonString], { type: 'application/json' });
-                    const objectUrl = URL.createObjectURL(blob);
+                // reset
+                resetUI();
+                // re-enable buttons
+                downloadLottieBtn.disabled = false;
+                downloadImageBtn.disabled = false;
+                downloadLottieBtn.innerHTML = '<span>🎬</span> Download Lottie (JSON)';
+                downloadImageBtn.innerHTML = '<span>🖼️</span> Download Images (WebP)';
+                startInput.disabled = false;
+                endInput.disabled = false;
+                isRunning = false;
+                currentMode = '';
+            }
 
-                    // ৬. ডাউনলোড ট্রিগার
-                    const link = document.createElement('a');
-                    link.href = objectUrl;
-                    link.download = fileName;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-
-                    // ৭. ক্লিনআপ
-                    setTimeout(() => URL.revokeObjectURL(objectUrl), 5000);
-
-                    setStatus(`✅ "${fileName}" ডাউনলোড সম্পূর্ণ! (${(blob.size / 1024).toFixed(1)} KB)`, 'success');
-                } catch (error) {
-                    console.error('ডাউনলোড ত্রুটি:', error);
-                    setStatus(`❌ ডাউনলোড ব্যর্থ: ${error.message}`, 'error');
-                } finally {
-                    downloadBtn.disabled = false;
+            // abort via reset
+            function abortOrReset() {
+                if (isRunning) {
+                    abortFlag = true;
+                    addLog('⏹️ Aborting ... (will finish current item)', 'error');
+                    if (currentMode === 'lottie') {
+                        downloadLottieBtn.innerHTML = '<span>⏹️</span> Stopping...';
+                    } else if (currentMode === 'image') {
+                        downloadImageBtn.innerHTML = '<span>⏹️</span> Stopping...';
+                    }
+                } else {
+                    resetUI();
+                    addLog('↺ Reset state', 'info');
+                    updateProgress(0, 0);
+                    fileCountBadge.textContent = '0 files';
+                    progressLabel.textContent = 'Ready';
                 }
             }
 
-            // URL ইনপুটে পরিবর্তন হলে প্রিভিউ আপডেট
-            urlInput.addEventListener('input', function() {
-                const val = this.value.trim();
-                if (val) {
-                    updateFileNamePreview(val);
-                } else {
-                    fileNamePreview.textContent = 'ফাইল নাম এখানে দেখাবে';
-                }
-                // আগের স্ট্যাটাস রিসেট (যদি error/success থাকে)
-                if (statusDiv.classList.contains('error') || statusDiv.classList.contains('success')) {
-                    statusDiv.className = 'status';
-                    statusDiv.innerHTML = `⏳ লিংক দিন ও ডাউনলোড চাপুন`;
-                }
-            });
+            // event listeners
+            downloadLottieBtn.addEventListener('click', () => startDownload('lottie'));
+            downloadImageBtn.addEventListener('click', () => startDownload('image'));
 
-            // ডাউনলোড বাটন ক্লিক
-            downloadBtn.addEventListener('click', downloadLottieJson);
+            resetBtn.addEventListener('click', abortOrReset);
 
-            // এন্টার কী সাপোর্ট
-            urlInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    downloadBtn.click();
-                }
-            });
+            startInput.addEventListener('input', updateTotalCount);
+            endInput.addEventListener('input', updateTotalCount);
 
-            // পেজ লোড হলে ডিফল্ট উদাহরণ প্রিভিউ আপডেট
-            window.addEventListener('DOMContentLoaded', function() {
-                const defaultUrl = urlInput.value;
-                if (defaultUrl) {
-                    updateFileNamePreview(defaultUrl);
-                    setStatus('⏳ ডিফল্ট উদাহরণ লিংক প্রস্তুত। ডাউনলোড চাপুন।', '');
-                }
-                // বাটন সক্রিয়
-                downloadBtn.disabled = false;
-            });
+            // init
+            updateTotalCount();
+            resetUI();
+            addLog('✨ Ready — choose Lottie or Images to download', 'info');
         })();
     </script>
 </body>
