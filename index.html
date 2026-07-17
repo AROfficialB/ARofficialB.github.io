@@ -182,7 +182,34 @@
       opacity: 0.8;
     }
 
-    /* dynamic attributes */
+    /* animation url field */
+    .animation-url-field {
+      margin: 0.5rem 0 1rem;
+    }
+
+    .animation-url-field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #99a9d9;
+      margin-bottom: 0.4rem;
+    }
+
+    .animation-url-field .input-wrap {
+      width: 100%;
+    }
+
+    .animation-url-field .input-wrap input {
+      width: 100%;
+      text-align: left;
+      padding-left: 0.5rem;
+      font-weight: 400;
+      font-size: 0.85rem;
+    }
+
+    /* attributes */
     .attributes-section {
       margin: 1.8rem 0 1.2rem;
     }
@@ -301,7 +328,7 @@
       transform: scale(0.97);
     }
 
-    /* right panel: preview & download */
+    /* right panel */
     .preview-panel {
       background: #0d1325;
       border-radius: 40px;
@@ -415,7 +442,6 @@
       letter-spacing: 0.3px;
     }
 
-    /* scrollbar */
     .attr-list::-webkit-scrollbar {
       width: 4px;
     }
@@ -469,6 +495,17 @@
         </div>
       </div>
 
+      <!-- Animation URL base (NEW) -->
+      <div class="animation-url-field">
+        <label><i class="fas fa-link" style="color: #f5b81b; margin-right: 4px;"></i> Animation Base URL</label>
+        <div class="input-wrap">
+          <input type="text" id="animBaseUrl" value="https://pepebot1.github.io/?id=" placeholder="https://yourdomain.com/?id=">
+        </div>
+        <div class="hint" style="margin-top: 0.2rem; font-size: 0.7rem; color: #5e6f9a;">
+          <i class="fas fa-info-circle"></i> ?id= will be appended automatically
+        </div>
+      </div>
+
       <!-- Attributes (dynamic) -->
       <div class="attributes-section">
         <div class="attributes-header">
@@ -499,7 +536,7 @@
         <span class="key">"name"</span>: <span class="string">"HoodPepe MineBot"</span>,<br>
         <span class="key">"description"</span>: <span class="string">"The ultimate on-chain Telegram miner..."</span>,<br>
         <span class="key">"image"</span>: <span class="string">"ipfs://bafybeianhhxww53yxajfikwzx5oyzwqpars2zcdnk6tcqcj6seivolz764/1.webp"</span>,<br>
-        <span class="key">"animation_url"</span>: <span class="string">"https://farbtcgame.github.io/?id=1"</span>,<br>
+        <span class="key">"animation_url"</span>: <span class="string">"https://pepebot1.github.io/?id=1"</span>,<br>
         <span class="key">"attributes"</span>: [ { <span class="key">"trait_type"</span>: <span class="string">"Demu"</span>, <span class="key">"value"</span>: <span class="string">"Attribute"</span> } ]
       </div>
 
@@ -527,6 +564,7 @@
     // DOM refs
     const imgInput = document.getElementById('imgCidStart');
     const animInput = document.getElementById('animCidStart');
+    const animBaseUrlInput = document.getElementById('animBaseUrl');
     const attrList = document.getElementById('attrList');
     const addAttrBtn = document.getElementById('addAttrBtn');
     const generateBtn = document.getElementById('generateBtn');
@@ -538,7 +576,6 @@
     const BASE_NAME = "HoodPepe MineBot";
     const BASE_DESCRIPTION = "The ultimate on-chain Telegram miner on Robinhood Chain. Tap into the blocks, mine $PEPE, and claim your meme fortune directly on-chain. Zero gas, pure speed, infinite rewards!";
     const BASE_IMAGE_PREFIX = "ipfs://bafybeianhhxww53yxajfikwzx5oyzwqpars2zcdnk6tcqcj6seivolz764/";
-    const BASE_ANIMATION_URL = "https://farbtcgame.github.io/?id=";
 
     // Helper: get current attributes array from DOM
     function getAttributes() {
@@ -556,13 +593,30 @@
       return attrs;
     }
 
+    // Get animation base URL (ensure trailing ?id= or similar)
+    function getAnimationBase() {
+      let base = animBaseUrlInput.value.trim();
+      if (!base) base = 'https://pepebot1.github.io/?id=';
+      // ensure it ends with ?id= or at least a separator
+      if (!base.includes('?id=')) {
+        // if it doesn't have ?id=, add it
+        if (base.includes('?')) {
+          base = base + '&id=';
+        } else {
+          base = base + '?id=';
+        }
+      }
+      return base;
+    }
+
     // Generate single JSON object
     function generateSingleJSON(imgCid, animCid, attributes) {
+      const animBase = getAnimationBase();
       return {
         name: BASE_NAME,
         description: BASE_DESCRIPTION,
         image: `${BASE_IMAGE_PREFIX}${imgCid}.webp`,
-        animation_url: `${BASE_ANIMATION_URL}${animCid}`,
+        animation_url: `${animBase}${animCid}`,
         attributes: attributes.slice() // copy
       };
     }
@@ -689,7 +743,6 @@
     });
 
     // Remove default button: we handle via event listener (already added)
-    // but need to attach to existing remove button in default
     document.querySelectorAll('.attr-item .remove-attr').forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -703,7 +756,7 @@
       });
     });
 
-    // Also attach input events for default
+    // Attach input events for default
     document.querySelectorAll('.attr-item input').forEach(inp => {
       inp.addEventListener('input', updatePreview);
     });
@@ -712,7 +765,6 @@
     generateBtn.addEventListener('click', function(e) {
       e.preventDefault();
       updatePreview();
-      // visual feedback
       generateBtn.innerHTML = '<i class="fas fa-check-circle"></i> Generated!';
       setTimeout(() => {
         generateBtn.innerHTML = '<i class="fas fa-bolt"></i> Generate 2825 JSONs';
@@ -725,7 +777,7 @@
     });
 
     // Input changes
-    [imgInput, animInput].forEach(el => {
+    [imgInput, animInput, animBaseUrlInput].forEach(el => {
       el.addEventListener('input', updatePreview);
       el.addEventListener('change', updatePreview);
     });
@@ -736,6 +788,7 @@
     // ensure default values
     imgInput.value = 1;
     animInput.value = 1;
+    animBaseUrlInput.value = 'https://pepebot1.github.io/?id=';
   })();
 </script>
 
