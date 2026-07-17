@@ -1,581 +1,743 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plush Pepe Downloader</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-        }
-        body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: #f2f6fc;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
-            margin: 0;
-        }
-        .card {
-            max-width: 920px;
-            width: 100%;
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 20px 48px -12px rgba(0,20,30,0.25);
-            padding: 2rem 2.2rem 2.5rem;
-            transition: 0.2s;
-        }
-        h1 {
-            font-size: 1.9rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: #0b1a2a;
-            margin-bottom: 0.2rem;
-        }
-        .sub {
-            color: #2a4b6e;
-            margin-bottom: 1.6rem;
-            font-size: 1rem;
-            border-left: 5px solid #7ca9d9;
-            padding-left: 1.2rem;
-            background: #eef4fb;
-            border-radius: 0 14px 14px 0;
-            line-height: 1.6;
-        }
-        .range-box {
-            background: #e9f0f8;
-            padding: 1.2rem 1.6rem;
-            border-radius: 1.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 1rem 2.2rem;
-            margin: 1rem 0 1.6rem;
-        }
-        .range-item {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-        }
-        .range-item label {
-            font-weight: 600;
-            color: #1a3857;
-        }
-        .range-item input {
-            width: 80px;
-            padding: 0.45rem 0.2rem 0.45rem 0.8rem;
-            border: 1px solid #bccfe0;
-            border-radius: 40px;
-            font-size: 1rem;
-            background: white;
-            font-weight: 500;
-        }
-        .range-item input:focus {
-            outline: 2px solid #2b6a9e;
-            border-color: transparent;
-        }
-        .info-badge {
-            background: #d2e2f5;
-            padding: 0.15rem 1.3rem;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #004080;
-        }
-        .split-download-area {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin: 1.6rem 0 1.2rem;
-        }
-        .btn {
-            background: #1a3e60;
-            border: none;
-            padding: 0.75rem 1.8rem;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: 1rem;
-            color: white;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 8px rgba(0,30,60,0.15);
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid #235b86;
-            flex: 1 1 auto;
-            justify-content: center;
-        }
-        .btn:hover {
-            background: #0f2d48;
-            transform: scale(1.01);
-            box-shadow: 0 8px 16px rgba(0,20,40,0.25);
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            pointer-events: none;
-            filter: grayscale(0.3);
-        }
-        .btn-green {
-            background: #1f6d4a;
-            border-color: #1f7a4f;
-        }
-        .btn-green:hover {
-            background: #145a3a;
-        }
-        .btn-blue {
-            background: #1f5a8e;
-            border-color: #1f6a9e;
-        }
-        .btn-blue:hover {
-            background: #13477a;
-        }
-        .btn-outline {
-            background: transparent;
-            color: #1a3e60;
-            border: 1.5px solid #1a3e60;
-            box-shadow: none;
-        }
-        .btn-outline:hover {
-            background: #e6eff8;
-        }
-        .progress-area {
-            margin: 1.5rem 0 1rem;
-        }
-        .progress-bar-bg {
-            background: #dce5f0;
-            height: 10px;
-            border-radius: 40px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #2b7ab0, #53a0d0);
-            border-radius: 40px;
-            transition: width 0.2s ease;
-        }
-        .status-text {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #1f4465;
-            margin-top: 0.4rem;
-        }
-        .log-area {
-            background: #f2f6fc;
-            border-radius: 1.2rem;
-            padding: 0.6rem 1.2rem;
-            max-height: 150px;
-            overflow-y: auto;
-            font-size: 0.85rem;
-            border: 1px solid #dce6f0;
-            margin: 1.2rem 0 0.5rem;
-            color: #0a1f33;
-            font-family: 'SF Mono', 'Cascadia Code', monospace;
-            line-height: 1.6;
-        }
-        .log-entry {
-            border-bottom: 1px solid rgba(0,0,0,0.03);
-            padding: 0.1rem 0;
-        }
-        .log-entry:last-child {
-            border-bottom: none;
-        }
-        .footer-meta {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.5rem;
-            border-top: 1px solid #d9e3ed;
-            padding-top: 1.2rem;
-            font-size: 0.9rem;
-            color: #3c5a78;
-        }
-        .badge-count {
-            background: #d2e2f5;
-            padding: 0.1rem 1.2rem;
-            border-radius: 40px;
-            font-weight: 500;
-        }
-        @media (max-width: 650px) {
-            .card { padding: 1.2rem; }
-            .range-box { flex-direction: column; align-items: stretch; gap: 0.8rem; }
-            .split-download-area { flex-direction: column; }
-            .btn { justify-content: center; }
-        }
-        a { color: #1f5a8e; }
-        .clear-log {
-            background: none;
-            border: none;
-            color: #4f6f8f;
-            cursor: pointer;
-            font-size: 0.75rem;
-            text-decoration: underline dotted;
-        }
-        .file-type-badge {
-            display: inline-block;
-            background: #1f4b70;
-            color: white;
-            font-size: 0.6rem;
-            font-weight: 700;
-            padding: 0.05rem 0.6rem;
-            border-radius: 40px;
-            margin-right: 0.4rem;
-            letter-spacing: 0.3px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ 2825 NFT JSON Generator · Premium</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #070b14;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1.5rem;
+      background-image: radial-gradient(circle at 20% 30%, #1a2340 0%, #070b14 80%);
+    }
+
+    .premium-card {
+      max-width: 1240px;
+      width: 100%;
+      background: rgba(14, 20, 38, 0.8);
+      backdrop-filter: blur(14px);
+      border-radius: 60px;
+      padding: 2.8rem 2.8rem 2.8rem;
+      box-shadow: 0 40px 80px -12px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 215, 0, 0.12);
+      border: 1px solid rgba(255, 215, 0, 0.08);
+      transition: 0.3s;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 2.2rem;
+    }
+
+    .logo-area h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #f7e05e, #f0b81b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-area h1 i {
+      -webkit-text-fill-color: #f5b81b;
+      font-size: 2.2rem;
+    }
+
+    .sub-badge {
+      display: flex;
+      gap: 1.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.3rem;
+    }
+
+    .badge-pill {
+      background: #1b2542;
+      padding: 0.3rem 1.2rem;
+      border-radius: 80px;
+      color: #bac8f0;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1px solid #31406a;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-pill i {
+      color: #f5b81b;
+    }
+
+    .grid-main {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 2.5rem;
+      margin: 1.8rem 0 1.2rem;
+    }
+
+    @media (max-width: 850px) {
+      .grid-main {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .premium-card {
+        padding: 1.8rem;
+      }
+    }
+
+    /* left panel */
+    .control-panel {
+      background: #0d1325;
+      border-radius: 40px;
+      padding: 2rem 1.8rem;
+      border: 1px solid #293452;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.7);
+    }
+
+    .control-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem 1.5rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .field {
+      flex: 1 0 160px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #99a9d9;
+      margin-bottom: 0.4rem;
+    }
+
+    .field .hint {
+      font-size: 0.7rem;
+      color: #5e6f9a;
+      margin-top: 0.25rem;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      background: #0a0f1e;
+      border-radius: 60px;
+      padding: 0.1rem 0.1rem 0.1rem 1.2rem;
+      border: 1px solid #2e3b60;
+      transition: 0.2s;
+    }
+
+    .input-wrap:focus-within {
+      border-color: #f5b81b;
+      box-shadow: 0 0 0 3px rgba(245, 184, 27, 0.15);
+    }
+
+    .input-wrap span {
+      color: #8997c7;
+      font-size: 0.9rem;
+      padding-right: 0.3rem;
+    }
+
+    .input-wrap input {
+      background: transparent;
+      border: none;
+      padding: 0.7rem 0.2rem;
+      color: #f0f4ff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      width: 76px;
+      text-align: center;
+      outline: none;
+    }
+
+    .input-wrap input[type="number"]::-webkit-inner-spin-button {
+      opacity: 0.5;
+    }
+
+    .input-wrap .prefix {
+      color: #7888b8;
+      font-weight: 400;
+      opacity: 0.8;
+    }
+
+    /* dynamic attributes */
+    .attributes-section {
+      margin: 1.8rem 0 1.2rem;
+    }
+
+    .attributes-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .attributes-header h3 {
+      color: #d0dcff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-attr-add {
+      background: #1e284a;
+      border: 1px solid #3c4b78;
+      color: #d6e0ff;
+      padding: 0.3rem 1.2rem;
+      border-radius: 60px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-attr-add:hover {
+      background: #2d3b66;
+      border-color: #f5b81b;
+      color: white;
+    }
+
+    .attr-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      max-height: 180px;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+    }
+
+    .attr-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #0f162b;
+      padding: 0.4rem 0.8rem 0.4rem 1.2rem;
+      border-radius: 60px;
+      border: 1px solid #25305a;
+    }
+
+    .attr-item input {
+      background: #070b18;
+      border: none;
+      border-radius: 30px;
+      padding: 0.4rem 1rem;
+      color: #f0f4ff;
+      font-size: 0.8rem;
+      flex: 1;
+      min-width: 80px;
+      outline: 1px solid #2a355e;
+    }
+
+    .attr-item input:focus {
+      outline-color: #f5b81b;
+    }
+
+    .attr-item .remove-attr {
+      background: transparent;
+      border: none;
+      color: #7f8fc7;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0 0.2rem;
+      transition: 0.15s;
+    }
+
+    .attr-item .remove-attr:hover {
+      color: #ff7b7b;
+    }
+
+    .btn-generate {
+      background: linear-gradient(135deg, #f5b81b, #dc9e10);
+      border: none;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 80px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #0b0e1a;
+      box-shadow: 0 8px 28px -6px #f5b81b55;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-top: 1rem;
+      border: 1px solid #ffdb7a;
+    }
+
+    .btn-generate:hover {
+      transform: scale(1.01);
+      background: #fccf4a;
+      box-shadow: 0 12px 34px -4px #f5b81b99;
+    }
+
+    .btn-generate:active {
+      transform: scale(0.97);
+    }
+
+    /* right panel: preview & download */
+    .preview-panel {
+      background: #0d1325;
+      border-radius: 40px;
+      padding: 1.8rem 1.6rem;
+      border: 1px solid #293452;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #b0c0ec;
+      font-size: 0.8rem;
+      border-bottom: 1px solid #25305a;
+      padding-bottom: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .json-box {
+      background: #070c1c;
+      border-radius: 24px;
+      padding: 1.2rem 1.2rem 0.8rem;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.7rem;
+      line-height: 1.7;
+      color: #c6d3fc;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid #1f2a4e;
+    }
+
+    .json-box .key { color: #f5b81b; }
+    .json-box .string { color: #9bdcb0; }
+    .json-box .number { color: #e6a6f0; }
+    .json-box .bracket { color: #b7c9ff; }
+
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1.2rem 0 0.6rem;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .file-count {
+      background: #141d38;
+      padding: 0.3rem 1.2rem;
+      border-radius: 80px;
+      color: #c4d2fc;
+      font-size: 0.8rem;
+      border: 1px solid #2a3762;
+    }
+
+    .file-count i {
+      color: #f5b81b;
+      margin-right: 0.5rem;
+    }
+
+    .btn-download {
+      background: #1a2444;
+      border: 1px solid #3b4a78;
+      color: #e6edff;
+      padding: 0.5rem 1.8rem;
+      border-radius: 80px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .btn-download:hover {
+      background: #28355f;
+      border-color: #f5b81b;
+      color: white;
+    }
+
+    .btn-download i {
+      color: #f5b81b;
+    }
+
+    .feature-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.6rem;
+      margin-top: 1rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid #1e284c;
+      color: #7b8bbd;
+      font-size: 0.75rem;
+    }
+
+    .feature-grid span i {
+      color: #f5b81b;
+      margin-right: 0.4rem;
+    }
+
+    .footer-meta {
+      margin-top: 0.8rem;
+      text-align: right;
+      color: #44517a;
+      font-size: 0.7rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* scrollbar */
+    .attr-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .attr-list::-webkit-scrollbar-track {
+      background: #141d38;
+      border-radius: 20px;
+    }
+    .attr-list::-webkit-scrollbar-thumb {
+      background: #f5b81b;
+      border-radius: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="card" role="main">
-        <h1>
-            <span>📦 Plush Pepe</span>
-            <span style="font-size: 1.1rem; background: #d4e2f5; padding: 0.1rem 1rem; border-radius: 40px;">split</span>
-        </h1>
-        <div class="sub">
-            ⚡ Download <strong>Lottie JSON</strong> and <strong>WebP</strong> images in <strong>separate ZIP files</strong>.<br>
-            Files are numbered: <code style="background:#dde8f5; padding:0 0.4rem;">1.lottie.json</code> … <code style="background:#dde8f5; padding:0 0.4rem;">2825.lottie.json</code> &amp; <code style="background:#dde8f5; padding:0 0.4rem;">1.webp</code> … <code style="background:#dde8f5; padding:0 0.4rem;">2825.webp</code>
-        </div>
 
-        <div class="range-box">
-            <div class="range-item">
-                <label for="startId">Start</label>
-                <input type="number" id="startId" min="1" max="2825" value="1">
-            </div>
-            <div class="range-item">
-                <label for="endId">End</label>
-                <input type="number" id="endId" min="1" max="2825" value="2825">
-            </div>
-            <div class="info-badge">
-                <span id="totalCount">2825</span> items
-            </div>
-        </div>
-
-        <div class="split-download-area">
-            <button class="btn btn-blue" id="downloadLottieBtn">
-                <span>🎬</span> Download Lottie (JSON)
-            </button>
-            <button class="btn btn-green" id="downloadImageBtn">
-                <span>🖼️</span> Download Images (WebP)
-            </button>
-            <button class="btn btn-outline" id="resetBtn" style="flex:0.5;">
-                ↺ Reset
-            </button>
-        </div>
-
-        <div class="progress-area">
-            <div class="progress-bar-bg">
-                <div class="progress-fill" id="progressFill" style="width:0%"></div>
-            </div>
-            <div class="status-text">
-                <span id="progressLabel">Ready</span>
-                <span id="progressPercent">0%</span>
-            </div>
-        </div>
-
-        <div class="log-area" id="logContainer">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                <span style="font-weight:500;">📋 Activity log</span>
-                <button class="clear-log" id="clearLogBtn">clear</button>
-            </div>
-            <div id="logEntries">
-                <div class="log-entry">⏳ waiting for action...</div>
-            </div>
-        </div>
-
-        <div class="footer-meta">
-            <span>🔗 source: <a href="https://nft.fragment.com/gift/" target="_blank">fragment.com/gift</a></span>
-            <span class="badge-count" id="fileCountBadge">0 files</span>
-        </div>
+<div class="premium-card">
+  <div class="header">
+    <div class="logo-area">
+      <h1><i class="fas fa-crown"></i> 2825·JSON</h1>
+      <div class="sub-badge">
+        <span class="badge-pill"><i class="fas fa-image"></i> img CID 1 → 2825</span>
+        <span class="badge-pill"><i class="fas fa-play"></i> animation id 1 → 2825</span>
+        <span class="badge-pill"><i class="fas fa-tags"></i> custom attributes</span>
+      </div>
     </div>
-    <!-- JSZip library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script>
-        (function() {
-            "use strict";
+    <div style="display: flex; gap: 0.6rem;">
+      <span class="badge-pill"><i class="fas fa-file-archive"></i> ZIP · 2825 .json</span>
+    </div>
+  </div>
 
-            // DOM refs
-            const startInput = document.getElementById('startId');
-            const endInput = document.getElementById('endId');
-            const totalSpan = document.getElementById('totalCount');
-            const downloadLottieBtn = document.getElementById('downloadLottieBtn');
-            const downloadImageBtn = document.getElementById('downloadImageBtn');
-            const resetBtn = document.getElementById('resetBtn');
-            const progressFill = document.getElementById('progressFill');
-            const progressLabel = document.getElementById('progressLabel');
-            const progressPercent = document.getElementById('progressPercent');
-            const logEntries = document.getElementById('logEntries');
-            const clearLogBtn = document.getElementById('clearLogBtn');
-            const fileCountBadge = document.getElementById('fileCountBadge');
+  <div class="grid-main">
+    <!-- LEFT: controls -->
+    <div class="control-panel">
+      <div class="control-group">
+        <div class="field">
+          <label><i class="fas fa-image" style="color: #f5b81b; margin-right: 4px;"></i> Image CID start</label>
+          <div class="input-wrap">
+            <span class="prefix">…/</span>
+            <input type="number" id="imgCidStart" value="1" min="1" max="2825">
+            <span>.webp</span>
+          </div>
+          <div class="hint">1 – 2825</div>
+        </div>
+        <div class="field">
+          <label><i class="fas fa-play" style="color: #f5b81b; margin-right: 4px;"></i> Animation id start</label>
+          <div class="input-wrap">
+            <span>?id=</span>
+            <input type="number" id="animCidStart" value="1" min="1" max="2825">
+          </div>
+          <div class="hint">1 – 2825</div>
+        </div>
+      </div>
 
-            // state
-            let isRunning = false;
-            let abortFlag = false;
-            let totalFiles = 0;
-            let processed = 0;
-            let currentMode = ''; // 'lottie' or 'image'
+      <!-- Attributes (dynamic) -->
+      <div class="attributes-section">
+        <div class="attributes-header">
+          <h3><i class="fas fa-list-ul" style="color: #f5b81b; margin-right: 8px;"></i>Attributes (all NFTs share these)</h3>
+          <button class="btn-attr-add" id="addAttrBtn"><i class="fas fa-plus-circle"></i> Add</button>
+        </div>
+        <div class="attr-list" id="attrList">
+          <!-- default attribute -->
+          <div class="attr-item" data-attr-index="0">
+            <input type="text" class="attr-trait" value="Demu" placeholder="trait_type">
+            <input type="text" class="attr-value" value="Attribute" placeholder="value">
+            <button class="remove-attr" title="Remove"><i class="fas fa-times-circle"></i></button>
+          </div>
+        </div>
+        <div style="font-size: 0.7rem; color: #5b6d99; margin-top: 0.3rem;"><i class="fas fa-info-circle"></i> All 2825 JSONs will include these attributes</div>
+      </div>
 
-            function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+      <button class="btn-generate" id="generateBtn"><i class="fas fa-bolt"></i> Generate 2825 JSONs</button>
+    </div>
 
-            function getRange() {
-                let start = parseInt(startInput.value, 10) || 1;
-                let end = parseInt(endInput.value, 10) || 2825;
-                start = clamp(start, 1, 2825);
-                end = clamp(end, 1, 2825);
-                if (start > end) { [start, end] = [end, start]; }
-                return { start, end, count: end - start + 1 };
-            }
+    <!-- RIGHT: preview & download -->
+    <div class="preview-panel">
+      <div class="preview-header">
+        <span><i class="fas fa-eye" style="color: #f5b81b;"></i> Preview (first JSON)</span>
+        <span style="background: #1b2545; padding: 0.1rem 0.9rem; border-radius: 40px; font-size: 0.7rem;">#1</span>
+      </div>
+      <div class="json-box" id="jsonPreview">
+        <span class="key">"name"</span>: <span class="string">"HoodPepe MineBot"</span>,<br>
+        <span class="key">"description"</span>: <span class="string">"The ultimate on-chain Telegram miner..."</span>,<br>
+        <span class="key">"image"</span>: <span class="string">"ipfs://bafybeianhhxww53yxajfikwzx5oyzwqpars2zcdnk6tcqcj6seivolz764/1.webp"</span>,<br>
+        <span class="key">"animation_url"</span>: <span class="string">"https://farbtcgame.github.io/?id=1"</span>,<br>
+        <span class="key">"attributes"</span>: [ { <span class="key">"trait_type"</span>: <span class="string">"Demu"</span>, <span class="key">"value"</span>: <span class="string">"Attribute"</span> } ]
+      </div>
 
-            function updateTotalCount() {
-                const { count } = getRange();
-                totalSpan.textContent = count;
-                return count;
-            }
+      <div class="action-bar">
+        <span class="file-count"><i class="fas fa-database"></i> <span id="fileCountDisplay">2825</span> files</span>
+        <button class="btn-download" id="downloadBtn"><i class="fas fa-file-archive"></i> Download ZIP</button>
+      </div>
 
-            // logging
-            function addLog(message, type = 'info') {
-                const entry = document.createElement('div');
-                entry.className = 'log-entry';
-                const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
-                entry.textContent = `${prefix} ${message}`;
-                logEntries.appendChild(entry);
-                while (logEntries.children.length > 80) {
-                    logEntries.removeChild(logEntries.firstChild);
-                }
-                logEntries.scrollTop = logEntries.scrollHeight;
-            }
+      <div class="feature-grid">
+        <span><i class="fas fa-check-circle"></i> 1.json … 2825.json</span>
+        <span><i class="fas fa-check-circle"></i> img CID cycles</span>
+        <span><i class="fas fa-check-circle"></i> animation id cycles</span>
+        <span><i class="fas fa-check-circle"></i> same attributes</span>
+      </div>
+      <div class="footer-meta">
+        <i class="fas fa-crown" style="color: #f5b81b;"></i> premium · one‑click
+      </div>
+    </div>
+  </div>
+</div>
 
-            function clearLog() {
-                logEntries.innerHTML = '';
-                addLog('log cleared', 'info');
-            }
-            clearLogBtn.addEventListener('click', clearLog);
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+  (function() {
+    // DOM refs
+    const imgInput = document.getElementById('imgCidStart');
+    const animInput = document.getElementById('animCidStart');
+    const attrList = document.getElementById('attrList');
+    const addAttrBtn = document.getElementById('addAttrBtn');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const jsonPreview = document.getElementById('jsonPreview');
+    const fileCountDisplay = document.getElementById('fileCountDisplay');
 
-            // progress
-            function updateProgress(current, total) {
-                const pct = total === 0 ? 0 : Math.round((current / total) * 100);
-                progressFill.style.width = pct + '%';
-                progressPercent.textContent = pct + '%';
-                if (current === total && total > 0) {
-                    progressLabel.textContent = '✅ Complete!';
-                } else if (isRunning) {
-                    progressLabel.textContent = `⬇️ ${current}/${total}`;
-                } else {
-                    progressLabel.textContent = 'Ready';
-                }
-            }
+    // Base constants
+    const BASE_NAME = "HoodPepe MineBot";
+    const BASE_DESCRIPTION = "The ultimate on-chain Telegram miner on Robinhood Chain. Tap into the blocks, mine $PEPE, and claim your meme fortune directly on-chain. Zero gas, pure speed, infinite rewards!";
+    const BASE_IMAGE_PREFIX = "ipfs://bafybeianhhxww53yxajfikwzx5oyzwqpars2zcdnk6tcqcj6seivolz764/";
+    const BASE_ANIMATION_URL = "https://farbtcgame.github.io/?id=";
 
-            function resetUI() {
-                isRunning = false;
-                abortFlag = false;
-                downloadLottieBtn.disabled = false;
-                downloadImageBtn.disabled = false;
-                downloadLottieBtn.innerHTML = '<span>🎬</span> Download Lottie (JSON)';
-                downloadImageBtn.innerHTML = '<span>🖼️</span> Download Images (WebP)';
-                processed = 0;
-                totalFiles = 0;
-                currentMode = '';
-                updateProgress(0, 0);
-                fileCountBadge.textContent = '0 files';
-                startInput.disabled = false;
-                endInput.disabled = false;
-            }
+    // Helper: get current attributes array from DOM
+    function getAttributes() {
+      const items = attrList.querySelectorAll('.attr-item');
+      const attrs = [];
+      items.forEach(item => {
+        const traitInput = item.querySelector('.attr-trait');
+        const valueInput = item.querySelector('.attr-value');
+        if (traitInput && valueInput) {
+          const trait = traitInput.value.trim() || 'unknown';
+          const val = valueInput.value.trim() || 'unknown';
+          attrs.push({ trait_type: trait, value: val });
+        }
+      });
+      return attrs;
+    }
 
-            // fetch helper with timeout
-            function fetchWithTimeout(url, timeout = 18000) {
-                return new Promise((resolve, reject) => {
-                    const controller = new AbortController();
-                    const timer = setTimeout(() => {
-                        controller.abort();
-                        reject(new Error('Timeout'));
-                    }, timeout);
-                    fetch(url, { signal: controller.signal })
-                        .then(response => {
-                            clearTimeout(timer);
-                            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                            return response;
-                        })
-                        .then(resolve)
-                        .catch(err => {
-                            clearTimeout(timer);
-                            reject(err);
-                        });
-                });
-            }
+    // Generate single JSON object
+    function generateSingleJSON(imgCid, animCid, attributes) {
+      return {
+        name: BASE_NAME,
+        description: BASE_DESCRIPTION,
+        image: `${BASE_IMAGE_PREFIX}${imgCid}.webp`,
+        animation_url: `${BASE_ANIMATION_URL}${animCid}`,
+        attributes: attributes.slice() // copy
+      };
+    }
 
-            // main download function
-            async function startDownload(mode) {
-                if (isRunning) {
-                    addLog('⏳ A download is already in progress', 'error');
-                    return;
-                }
+    // Format JSON with syntax highlight
+    function formatHighlight(obj) {
+      const str = JSON.stringify(obj, null, 2);
+      return str
+        .replace(/"([^"]+)":/g, '<span class="key">"$1"</span>:')
+        .replace(/: "([^"]*)"/g, ': <span class="string">"$1"</span>')
+        .replace(/: (\d+)/g, ': <span class="number">$1</span>')
+        .replace(/\[/g, '<span class="bracket">[</span>')
+        .replace(/\]/g, '<span class="bracket">]</span>')
+        .replace(/\{/g, '<span class="bracket">{</span>')
+        .replace(/\}/g, '<span class="bracket">}</span>');
+    }
 
-                const { start, end, count } = getRange();
-                if (count === 0) {
-                    addLog('⚠️ No items in range', 'error');
-                    return;
-                }
+    // Update preview
+    function updatePreview() {
+      let imgStart = parseInt(imgInput.value, 10) || 1;
+      let animStart = parseInt(animInput.value, 10) || 1;
+      imgStart = Math.min(2825, Math.max(1, imgStart));
+      animStart = Math.min(2825, Math.max(1, animStart));
 
-                const fileExt = mode === 'lottie' ? 'lottie.json' : 'webp';
-                const zipName = mode === 'lottie' 
-                    ? `plushpepe_lottie_${start}-${end}.zip` 
-                    : `plushpepe_images_${start}-${end}.zip`;
-                const label = mode === 'lottie' ? 'Lottie JSON' : 'WebP images';
+      const attrs = getAttributes();
+      const first = generateSingleJSON(imgStart, animStart, attrs);
+      const highlighted = formatHighlight(first);
+      jsonPreview.innerHTML = highlighted;
+      fileCountDisplay.textContent = '2825';
+    }
 
-                // lock
-                isRunning = true;
-                abortFlag = false;
-                currentMode = mode;
-                totalFiles = count;
-                processed = 0;
-                downloadLottieBtn.disabled = true;
-                downloadImageBtn.disabled = true;
-                startInput.disabled = true;
-                endInput.disabled = true;
+    // Generate all 2825 JSONs (array)
+    function generateAllJSONs() {
+      let imgStart = parseInt(imgInput.value, 10) || 1;
+      let animStart = parseInt(animInput.value, 10) || 1;
+      imgStart = Math.min(2825, Math.max(1, imgStart));
+      animStart = Math.min(2825, Math.max(1, animStart));
 
-                if (mode === 'lottie') {
-                    downloadLottieBtn.innerHTML = '<span>⏳</span> Downloading Lottie...';
-                } else {
-                    downloadImageBtn.innerHTML = '<span>⏳</span> Downloading Images...';
-                }
+      const attrs = getAttributes();
+      const results = [];
+      for (let i = 0; i < 2825; i++) {
+        // cycle through 1..2825
+        let imgCid = ((imgStart + i - 1) % 2825) + 1;
+        let animCid = ((animStart + i - 1) % 2825) + 1;
+        results.push(generateSingleJSON(imgCid, animCid, attrs));
+      }
+      return results;
+    }
 
-                updateProgress(0, totalFiles);
-                fileCountBadge.textContent = '0 files';
-                addLog(`🚀 Starting ${label} download (${count} items)`);
+    // Download ZIP
+    function downloadZip() {
+      const all = generateAllJSONs();
+      if (!all || all.length !== 2825) {
+        alert('Error generating 2825 JSONs');
+        return;
+      }
 
-                const zip = new JSZip();
-                let successCount = 0;
-                let failCount = 0;
+      const zip = new JSZip();
+      for (let i = 0; i < all.length; i++) {
+        const jsonString = JSON.stringify(all[i], null, 2);
+        zip.file(`${i+1}.json`, jsonString);
+      }
 
-                for (let id = start; id <= end; id++) {
-                    if (abortFlag) {
-                        addLog('⛔ Aborted by user', 'error');
-                        break;
-                    }
+      zip.generateAsync({ type: 'blob' }).then((blob) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'nft_2825_metadata.zip';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+      }).catch(err => {
+        alert('ZIP creation failed: ' + err);
+      });
+    }
 
-                    let url;
-                    if (mode === 'lottie') {
-                        url = `https://nft.fragment.com/gift/plushpepe-${id}.lottie.json`;
-                    } else {
-                        url = `https://nft.fragment.com/gift/plushpepe-${id}.webp`;
-                    }
+    // ---- Attribute management ----
+    function addAttribute(trait = '', value = '') {
+      const div = document.createElement('div');
+      div.className = 'attr-item';
+      div.dataset.attrIndex = attrList.children.length;
 
-                    const fileName = mode === 'lottie' 
-                        ? `${id}.lottie.json` 
-                        : `${id}.webp`;
+      const input1 = document.createElement('input');
+      input1.type = 'text';
+      input1.className = 'attr-trait';
+      input1.placeholder = 'trait_type';
+      input1.value = trait || '';
 
-                    try {
-                        const resp = await fetchWithTimeout(url);
-                        if (mode === 'lottie') {
-                            const text = await resp.text();
-                            // validate JSON
-                            try { JSON.parse(text); } catch (_) { throw new Error('Invalid JSON'); }
-                            zip.file(fileName, text);
-                            addLog(`📄 ${fileName} (${(text.length/1024).toFixed(1)} KB)`, 'success');
-                        } else {
-                            const blob = await resp.blob();
-                            zip.file(fileName, blob);
-                            addLog(`🖼️ ${fileName} (${(blob.size/1024).toFixed(1)} KB)`, 'success');
-                        }
-                        successCount++;
-                    } catch (err) {
-                        failCount++;
-                        addLog(`❌ ${url} — ${err.message || 'failed'}`, 'error');
-                    }
+      const input2 = document.createElement('input');
+      input2.type = 'text';
+      input2.className = 'attr-value';
+      input2.placeholder = 'value';
+      input2.value = value || '';
 
-                    processed++;
-                    updateProgress(processed, totalFiles);
-                    fileCountBadge.textContent = `${successCount} files`;
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-attr';
+      removeBtn.innerHTML = '<i class="fas fa-times-circle"></i>';
+      removeBtn.setAttribute('title', 'Remove');
+      removeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (attrList.children.length <= 1) {
+          alert('At least one attribute is required.');
+          return;
+        }
+        div.remove();
+        updatePreview();
+      });
 
-                    // small delay
-                    await new Promise(r => setTimeout(r, 80));
-                }
+      div.appendChild(input1);
+      div.appendChild(input2);
+      div.appendChild(removeBtn);
 
-                // generate and download ZIP
-                if (!abortFlag) {
-                    if (successCount === 0) {
-                        addLog(`⚠️ No ${label} files downloaded — ZIP empty`, 'error');
-                    } else {
-                        addLog(`📦 Generating ${label} ZIP (${successCount} files) ...`, 'info');
-                        try {
-                            const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
-                            const link = document.createElement('a');
-                            link.href = URL.createObjectURL(zipBlob);
-                            link.download = zipName;
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                            setTimeout(() => URL.revokeObjectURL(link.href), 5000);
-                            addLog(`🎉 ${label} ZIP downloaded: ${(zipBlob.size/1024/1024).toFixed(2)} MB`, 'success');
-                        } catch (zipErr) {
-                            addLog(`❌ ZIP generation failed: ${zipErr.message}`, 'error');
-                        }
-                    }
-                }
+      // update preview on change
+      input1.addEventListener('input', updatePreview);
+      input2.addEventListener('input', updatePreview);
 
-                const finalMsg = abortFlag ? '⛔ Aborted' : `✅ Done. Success: ${successCount}, Failed: ${failCount}`;
-                progressLabel.textContent = finalMsg;
-                if (!abortFlag && successCount > 0) {
-                    progressPercent.textContent = '100%';
-                    progressFill.style.width = '100%';
-                }
-                fileCountBadge.textContent = `${successCount} files`;
-                addLog(`🏁 Finished ${label} — ${successCount} ok, ${failCount} failed`, 'info');
+      attrList.appendChild(div);
+      updatePreview();
+    }
 
-                // reset
-                resetUI();
-                // re-enable buttons
-                downloadLottieBtn.disabled = false;
-                downloadImageBtn.disabled = false;
-                downloadLottieBtn.innerHTML = '<span>🎬</span> Download Lottie (JSON)';
-                downloadImageBtn.innerHTML = '<span>🖼️</span> Download Images (WebP)';
-                startInput.disabled = false;
-                endInput.disabled = false;
-                isRunning = false;
-                currentMode = '';
-            }
+    // Add button
+    addAttrBtn.addEventListener('click', function() {
+      addAttribute('', '');
+    });
 
-            // abort via reset
-            function abortOrReset() {
-                if (isRunning) {
-                    abortFlag = true;
-                    addLog('⏹️ Aborting ... (will finish current item)', 'error');
-                    if (currentMode === 'lottie') {
-                        downloadLottieBtn.innerHTML = '<span>⏹️</span> Stopping...';
-                    } else if (currentMode === 'image') {
-                        downloadImageBtn.innerHTML = '<span>⏹️</span> Stopping...';
-                    }
-                } else {
-                    resetUI();
-                    addLog('↺ Reset state', 'info');
-                    updateProgress(0, 0);
-                    fileCountBadge.textContent = '0 files';
-                    progressLabel.textContent = 'Ready';
-                }
-            }
+    // Remove default button: we handle via event listener (already added)
+    // but need to attach to existing remove button in default
+    document.querySelectorAll('.attr-item .remove-attr').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const item = this.closest('.attr-item');
+        if (attrList.children.length <= 1) {
+          alert('At least one attribute is required.');
+          return;
+        }
+        if (item) item.remove();
+        updatePreview();
+      });
+    });
 
-            // event listeners
-            downloadLottieBtn.addEventListener('click', () => startDownload('lottie'));
-            downloadImageBtn.addEventListener('click', () => startDownload('image'));
+    // Also attach input events for default
+    document.querySelectorAll('.attr-item input').forEach(inp => {
+      inp.addEventListener('input', updatePreview);
+    });
 
-            resetBtn.addEventListener('click', abortOrReset);
+    // ---- Events ----
+    generateBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      updatePreview();
+      // visual feedback
+      generateBtn.innerHTML = '<i class="fas fa-check-circle"></i> Generated!';
+      setTimeout(() => {
+        generateBtn.innerHTML = '<i class="fas fa-bolt"></i> Generate 2825 JSONs';
+      }, 2000);
+    });
 
-            startInput.addEventListener('input', updateTotalCount);
-            endInput.addEventListener('input', updateTotalCount);
+    downloadBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      downloadZip();
+    });
 
-            // init
-            updateTotalCount();
-            resetUI();
-            addLog('✨ Ready — choose Lottie or Images to download', 'info');
-        })();
-    </script>
+    // Input changes
+    [imgInput, animInput].forEach(el => {
+      el.addEventListener('input', updatePreview);
+      el.addEventListener('change', updatePreview);
+    });
+
+    // initial preview
+    updatePreview();
+
+    // ensure default values
+    imgInput.value = 1;
+    animInput.value = 1;
+  })();
+</script>
+
 </body>
 </html>
