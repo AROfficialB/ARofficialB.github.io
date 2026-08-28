@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NFT Holder Snapshot — Robinhood</title>
+  <title>NFT Holder Snapshot — Multi‑Network</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -75,7 +75,6 @@
       z-index: 100;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
-    /* multi-collection card */
     .collection-card {
       border: 1px solid rgba(139, 92, 246, 0.2);
       border-radius: 16px;
@@ -83,14 +82,45 @@
       transition: background 0.2s;
     }
     .collection-card:hover { background: rgba(255,255,255,0.04); }
-    .badge-robinhood {
+    .badge-network {
       background: rgba(139, 92, 246, 0.2);
       color: #a78bfa;
       font-size: 0.6rem;
       font-weight: 600;
-      padding: 0.15rem 0.6rem;
+      padding: 0.2rem 0.8rem;
       border-radius: 20px;
       letter-spacing: 0.02em;
+    }
+    .badge-network.eth {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+    .network-selector {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(139,92,246,0.2);
+      border-radius: 12px;
+      padding: 0.25rem;
+      display: inline-flex;
+    }
+    .network-selector button {
+      background: transparent;
+      border: none;
+      padding: 0.3rem 1rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #9ca3af;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .network-selector button.active {
+      background: rgba(139, 92, 246, 0.25);
+      color: #c4b5fd;
+      box-shadow: 0 0 12px rgba(139,92,246,0.1);
+    }
+    .network-selector button.eth-active {
+      background: rgba(59, 130, 246, 0.25);
+      color: #93c5fd;
     }
   </style>
 </head>
@@ -103,27 +133,28 @@
       <!-- Header -->
       <header class="text-center mb-10 fade-up">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-medium mb-5 tracking-wide">
-          <i data-lucide="hexagon" style="width:14px;height:14px;"></i> ROBINHOOD ON-CHAIN
+          <i data-lucide="hexagon" style="width:14px;height:14px;"></i> MULTI‑NETWORK SNAPSHOT
         </div>
         <h1 id="siteTitle" class="text-3xl sm:text-5xl font-bold text-white mb-3 tracking-tight">NFT Holder Snapshot</h1>
-        <p id="subtitleText" class="text-gray-400 text-sm sm:text-base max-w-md mx-auto">Export holders from any Robinhood NFT collection — top 1000 addresses per contract.</p>
+        <p id="subtitleText" class="text-gray-400 text-sm sm:text-base max-w-md mx-auto">Export holders from Robinhood or Ethereum NFT collections — top 1000 addresses per contract.</p>
       </header>
 
       <!-- Main Card -->
       <div class="glow-border rounded-2xl bg-white/[0.03] backdrop-blur-sm p-5 sm:p-8 fade-up fade-up-d1">
-        <!-- Network : Robinhood fixed -->
-        <div class="mb-5 flex items-center justify-between">
+        <!-- Network Selector -->
+        <div class="mb-5 flex items-center justify-between flex-wrap gap-2">
           <span class="text-gray-300 text-sm font-medium">Network</span>
-          <span class="badge-robinhood flex items-center gap-1.5">
-            <span class="inline-block w-2 h-2 rounded-full bg-violet-400"></span> Robinhood
-          </span>
+          <div class="network-selector" id="networkSelector">
+            <button id="netRobinhood" class="active" data-network="robinhood">Robinhood</button>
+            <button id="netEthereum" data-network="ethereum" class="">Ethereum</button>
+          </div>
         </div>
 
         <!-- Contract Address -->
         <div class="mb-5">
           <label for="contractInput" class="block text-gray-300 text-sm font-medium mb-2">Contract Address</label>
           <input id="contractInput" type="text" placeholder="0x..." spellcheck="false" class="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none input-glow transition font-mono">
-          <p class="text-gray-600 text-xs mt-1.5">Enter a Robinhood NFT contract address.</p>
+          <p id="networkHint" class="text-gray-600 text-xs mt-1.5">Enter a Robinhood NFT contract address.</p>
         </div>
 
         <!-- API Key -->
@@ -202,7 +233,7 @@
 
       <!-- Footer -->
       <footer class="text-center mt-10 text-gray-600 text-xs">
-        Uses <a href="https://docs.alchemy.com/reference/getownersforcollection" target="_blank" rel="noopener noreferrer" class="text-violet-500 hover:text-violet-400">Alchemy API</a> · Robinhood network only · Top 1000 addresses
+        Uses <a href="https://docs.alchemy.com/reference/getownersforcollection" target="_blank" rel="noopener noreferrer" class="text-violet-500 hover:text-violet-400">Alchemy API</a> · Robinhood / Ethereum · Top 1000 addresses
       </footer>
     </div>
 
@@ -213,6 +244,7 @@
   <script>
     // --------------------- STATE ---------------------------
     let holdersData = [];
+    let currentNetwork = 'robinhood'; // 'robinhood' or 'ethereum'
 
     // --------------------- TOAST ---------------------------
     function showToast(msg, type = 'error') {
@@ -222,7 +254,36 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
-    // --------------- FETCH HOLDERS (Robinhood, top 1000) ------------
+    // --------------- NETWORK SELECTOR ---------------------
+    document.getElementById('netRobinhood').addEventListener('click', function() {
+      setNetwork('robinhood');
+    });
+    document.getElementById('netEthereum').addEventListener('click', function() {
+      setNetwork('ethereum');
+    });
+
+    function setNetwork(net) {
+      currentNetwork = net;
+      // update UI
+      document.querySelectorAll('.network-selector button').forEach(b => b.classList.remove('active', 'eth-active'));
+      if (net === 'robinhood') {
+        document.getElementById('netRobinhood').classList.add('active');
+        document.getElementById('networkHint').textContent = 'Enter a Robinhood NFT contract address.';
+        document.getElementById('siteTitle').textContent = 'NFT Holder Snapshot';
+        document.getElementById('subtitleText').textContent = 'Export holders from any Robinhood NFT collection — top 1000 addresses.';
+      } else {
+        document.getElementById('netEthereum').classList.add('eth-active');
+        document.getElementById('networkHint').textContent = 'Enter an Ethereum NFT contract address (ERC-721 / ERC-1155).';
+        document.getElementById('siteTitle').textContent = 'NFT Holder Snapshot · Ethereum';
+        document.getElementById('subtitleText').textContent = 'Export holders from any Ethereum NFT collection — top 1000 addresses.';
+      }
+      // reset results
+      document.getElementById('resultsSection').classList.add('hidden');
+      holdersData = [];
+      lucide.createIcons();
+    }
+
+    // --------------- FETCH HOLDERS (dual network) ------------
     async function fetchHolders() {
       const contract = document.getElementById('contractInput').value.trim();
       const apiKey = document.getElementById('apiKeyInput').value.trim();
@@ -239,11 +300,17 @@
       document.getElementById('resultsSection').classList.add('hidden');
       holdersData = [];
 
-      // ROBINHOOD mainnet base URL
-      const baseUrl = `https://robinhood-mainnet.g.alchemy.com/v2/${apiKey}/getOwnersForCollection`;
+      // Build base URL based on network
+      let baseUrl;
+      if (currentNetwork === 'robinhood') {
+        baseUrl = `https://robinhood-mainnet.g.alchemy.com/v2/${apiKey}/getOwnersForCollection`;
+      } else {
+        baseUrl = `https://eth-mainnet.g.alchemy.com/v2/${apiKey}/getOwnersForCollection`;
+      }
+
       let pageKey = '';
       let totalFetched = 0;
-      const MAX_HOLDERS = 1000;  // top 1000 only
+      const MAX_HOLDERS = 1000;
 
       try {
         do {
@@ -271,11 +338,9 @@
           }
 
           pageKey = data.pageKey || '';
-          // stop if we have enough or no more pages
           if (holdersData.length >= MAX_HOLDERS || !pageKey) break;
         } while (pageKey);
 
-        // trim to top 1000
         if (holdersData.length > MAX_HOLDERS) {
           holdersData = holdersData.slice(0, MAX_HOLDERS);
         }
@@ -283,7 +348,6 @@
         document.getElementById('progressBar').style.width = '100%';
         document.getElementById('progressMsg').textContent = `Done! (top ${holdersData.length} holders)`;
 
-        // Sort by balance desc
         holdersData.sort((a, b) => b.balance - a.balance);
         renderResults();
         showToast(`Found ${holdersData.length.toLocaleString()} unique holders (top 1000)!`, 'success');
@@ -319,13 +383,14 @@
     function downloadCSV() {
       if (!holdersData.length) return;
       const contract = document.getElementById('contractInput').value.trim();
+      const netLabel = currentNetwork === 'robinhood' ? 'robinhood' : 'ethereum';
       let csv = 'rank,address,balance\n';
       holdersData.forEach((h, i) => { csv += `${i + 1},${h.address},${h.balance}\n`; });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `robinhood_holders_${contract.slice(0, 8)}.csv`;
+      a.download = `${netLabel}_holders_${contract.slice(0, 8)}.csv`;
       a.click();
       URL.revokeObjectURL(url);
       showToast('CSV downloaded!', 'success');
@@ -334,7 +399,7 @@
     // --------------- ELEMENT SDK CONFIG (unchanged) ----------
     const defaultConfig = {
       site_title: 'NFT Holder Snapshot',
-      subtitle_text: "Export any Robinhood NFT collection's top 1000 holders — powered by Alchemy.",
+      subtitle_text: "Export any Robinhood or Ethereum NFT collection's top 1000 holders — powered by Alchemy.",
       background_color: '#0a0a0f',
       surface_color: '#1a0a2e',
       text_color: '#e5e7eb',
